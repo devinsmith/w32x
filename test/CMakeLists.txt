@@ -1,0 +1,3 @@
+ADD_EXECUTABLE(test1 test1.c)
+TARGET_LINK_LIBRARIES(test1 w32x X11)
+

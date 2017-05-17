@@ -6,4 +6,4 @@ EndPaint.
 Update BeginPaint to process from queue.
 Push WM_PAINT messages to queue instead of returning them from GetMessage.
 
-CMake support?
+Improve CMake support.
