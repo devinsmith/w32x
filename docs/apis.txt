@@ -1,0 +1,33 @@
+What's the difference between SendMessage and PostMessage?
+
+SendMessage sends to window proc (via CallWindowProc?)
+PostMessage sends message to queue.
+
+According to MSDN, WM_PAINT is not removed by GetMessage.
+I think BeginPaint needs to remove it. Or possibly EndPaint.
+
+======================
+GetStockObject will initialize the stock objects on the first call.
+
+======================
+Drawing
+
+In Win32, drawing is done with a PEN (HPEN) object selected into the DC.
+Painting is done with a BRUSH (HBRUSH) object selected into a DC.
+
+In X11, basic drawing is done using the foreground member of the GC.. thus
+to mimic Win32, we change the GC when we know we have to use brush and when
+we have to use pen.
+
+When filling a rectangle a brush is used in Win32, but in X11 the foreground
+is still used.
+
+
+
+DCs (aka GCs in X11).
+=====================
+According to MSDN, there are common DCs, DCs that belong to
+a class, and private DC (i think this is from CS_OWNDC style) which makes
+a specific window claim a DC.
+
+
