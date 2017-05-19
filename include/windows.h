@@ -57,6 +57,7 @@ typedef unsigned int DWORD;
 typedef unsigned int UINT;
 
 typedef long LONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
+typedef unsigned long ULONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef uintptr_t UINT_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 
 typedef UINT_PTR WPARAM;
@@ -157,7 +158,6 @@ void DestroyWindow(HWND wnd);
 
 HDC BeginPaint(HWND wnd);
 HGDIOBJ GetStockObject(int fnObject);
-HBRUSH CreateSolidBrush(COLORREF crColor);
 HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor);
 
 BOOL DeleteObject(HGDIOBJ hObject);
@@ -179,5 +179,6 @@ int DispatchMessage(const MSG *msg);
 void PostQuitMessage(int nExitCode);
 
 #include <winuser.h>
+#include <wingdi.h>
 
 #endif /* __WINDOWS_H__ */

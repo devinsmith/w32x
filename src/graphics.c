@@ -86,13 +86,27 @@ HGDIOBJ GetStockObject(int fnObject)
   return NULL;
 }
 
+HBRUSH CreateBrushIndirect(const LOGBRUSH *lplb)
+{
+  struct GDIOBJ *obj;
+
+  if (lplb == NULL)
+    return NULL;
+
+  obj = calloc(1, sizeof(struct GDIOBJ));
+  obj->objType = BRUSH_TYPE;
+  obj->crColor = lplb->lbColor;
+  return obj;
+}
+
 HBRUSH CreateSolidBrush(COLORREF crColor)
 {
-  struct GDIOBJ *obj = calloc(1, sizeof(struct GDIOBJ));
+  LOGBRUSH lb;
 
-  obj->objType = BRUSH_TYPE;
-  obj->crColor = crColor;
-  return obj;
+  memset(&lb, 0, sizeof(lb));
+  lb.lbStyle = BS_SOLID;
+  lb.lbColor = crColor;
+  return CreateBrushIndirect(&lb);
 }
 
 HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor)
