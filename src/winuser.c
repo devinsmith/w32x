@@ -26,6 +26,93 @@
 #include "w32x_priv.h"
 
 extern Display *disp;
+extern XContext ctxt;
+extern Atom WM_DELETE_WINDOW;
+
+HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
+  DWORD dwStyle, int x, int y, int width, int height, HWND parent)
+{
+  return CreateWindowEx(0, lpClassName, lpWindowName, dwStyle, x, y,
+      width, height, parent);
+}
+
+HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
+  const char *lpWindowName, DWORD dwStyle, int x, int y, int width,
+  int height, HWND parent)
+{
+  XClassHint class_hint;
+  Window parent_win;
+  Wnd *wnd;
+  WndClass *wc = get_class_by_name(lpClassName);
+
+  if (wc == NULL) {
+    /* Can't create window, no class */
+    return NULL;
+  }
+
+  wnd = calloc(1, sizeof(Wnd) + wc->wndExtra);
+
+  if (parent != NULL) {
+    parent_win = parent->window;
+  } else {
+    parent_win = DefaultRootWindow(disp);
+  }
+
+  /* Create our GC */
+  wnd->hdc = w32x_CreateDC();
+
+  /* Save the styles */
+  wnd->dwStyle = dwStyle;
+  wnd->dwExStyle = dwExStyle;
+
+  /* parent window */
+  wnd->window = XCreateSimpleWindow(disp, parent_win,
+    x, y, width, height,
+    dwStyle & WS_BORDER ? 1 : 0,
+    wc->border_pixel, wc->background_pixel);
+  wnd->label = strdup(lpWindowName);
+  wnd->proc = wc->proc;
+  wnd->parent = parent;
+  class_hint.res_name = wnd->label;
+  class_hint.res_class = wc->name;
+  XSetClassHint(disp, wnd->window, &class_hint);
+
+  XSaveContext(disp, wnd->window, ctxt, (XPointer)wnd);
+
+  XSelectInput(disp, wnd->window,
+    ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask |
+    StructureNotifyMask);
+
+  /* Parent will explicitly call ShowWindow when ready */
+  if (parent != NULL)
+    ShowWindow(wnd);
+
+  /* For top level windows we want to do some extra special case
+   * processing */
+  if (parent == NULL) {
+    SetWindowName(wnd, lpWindowName);
+
+    /* Use the WM_DELETE_WINDOW atom to tell the window manager that we want
+     * to handle when this window is closed/destroyed */
+    XSetWMProtocols(disp, wnd->window, &WM_DELETE_WINDOW, 1);
+  }
+
+  return wnd;
+}
+
+LONG GetWindowLong(HWND hWnd, int nIndex)
+{
+  /* TODO: Not all indexes are handled. */
+  if (hWnd == NULL)
+    return 0;
+
+  if (nIndex == GWL_EXSTYLE)
+    return hWnd->dwExStyle;
+  else if (nIndex == GWL_STYLE)
+    return hWnd->dwStyle;
+  else
+    return 0;
+}
 
 BOOL GetWindowRect(HWND wnd, LPRECT rect)
 {

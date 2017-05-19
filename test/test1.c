@@ -71,12 +71,12 @@ main(int argc, char *argv[])
 
 
   /* parent window */
-  top = CreateWindow("TopWindow", "Test1", WS_BORDER, NULL, 200, 200, 500, 300);
+  top = CreateWindow("TopWindow", "Test1", WS_BORDER, 200, 200, 500, 300, NULL);
 
-  CreateWindow("MenuBar", "Nothing", 0, top, 0, 0, 500, 25);
+  CreateWindow("MenuBar", "Nothing", 0, 0, 0, 500, 25, top);
 
-  CreateWindow("RadioButton", "Radio 1", WS_BORDER, top, 5, 30, 100, 25);
-  CreateWindow("RadioButton", "Radio 2", WS_BORDER, top, 5, 60, 100, 25);
+  CreateWindow("RadioButton", "Radio 1", WS_BORDER, 5, 30, 100, 25, top);
+  CreateWindow("RadioButton", "Radio 2", WS_BORDER, 5, 60, 100, 25, top);
 
   ShowWindow(top);
 

@@ -21,6 +21,18 @@
 #ifndef __WINUSER_H__
 #define __WINUSER_H__
 
+/* GetWindowLong indexes */
+#define GWL_EXSTYLE -20
+#define GWL_STYLE -16
+
+HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
+  DWORD dwStyle, int x, int y, int width, int height, HWND parent);
+
+HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
+  const char *lpWindowName, DWORD dwStyle, int x, int y, int nWidth,
+  int nHeight, HWND hWndParent);
+
+LONG GetWindowLong(HWND hWnd, int nIndex);
 BOOL GetWindowRect(HWND wnd, LPRECT rect);
 
 int ReleaseDC(HWND hWnd, HDC hDC);

@@ -147,9 +147,6 @@ typedef MSG *LPMSG;
 
 int w32x_init(const char *display_name);
 
-HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
-    DWORD dwStyle, HWND parent, int x, int y,
-    int width, int height);
 
 int RegisterClass(WNDCLASS *wndclass);
 

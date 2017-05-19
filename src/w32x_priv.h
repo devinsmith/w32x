@@ -19,6 +19,8 @@
 
 struct Wnd {
   Window window;
+  DWORD dwStyle;
+  DWORD dwExStyle;
   Wnd *parent;
   char *label;
   int isTopLevel;
@@ -28,6 +30,16 @@ struct Wnd {
   char wndExtra[];
 };
 
+struct WndClass {
+  struct WndClass *next;
+  char *name;
+  unsigned long border_pixel;
+  unsigned long background_pixel;
+  int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+  size_t wndExtra;
+};
+
 HDC w32x_CreateDC(void);
+WndClass *get_class_by_name(const char *name);
 
 #endif /* __W32X_PRIV_H__ */

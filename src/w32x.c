@@ -46,15 +46,6 @@ struct paint_entry {
 TAILQ_HEAD(msg_queue, msgq_entry) g_msg_queue;
 TAILQ_HEAD(paint_queue, paint_entry) g_paint_queue;
 
-struct WndClass {
-  struct WndClass *next;
-  char *name;
-  unsigned long border_pixel;
-  unsigned long background_pixel;
-  int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
-  size_t wndExtra;
-};
-
 static WndClass *class_list = NULL;
 
 extern WNDCLASS ButtonClass;
@@ -90,8 +81,7 @@ int w32x_init(const char *display_name)
   return 0;
 }
 
-static WndClass *
-get_class_by_name(const char *name)
+WndClass *get_class_by_name(const char *name)
 {
   WndClass *wc;
 
@@ -136,67 +126,6 @@ RegisterClass(WNDCLASS *wndClass)
   class_list = wc;
 
   return 0;
-}
-
-HWND
-CreateWindow(const char *lpClassName, const char *lpWindowName,
-    DWORD dwStyle, HWND parent, int x, int y, int width,
-    int height)
-{
-  XClassHint class_hint;
-  Window parent_win;
-  Wnd *wnd;
-  WndClass *wc = get_class_by_name(lpClassName);
-
-  if (wc == NULL) {
-    /* Can't create window, no class */
-    return NULL;
-  }
-
-  wnd = calloc(1, sizeof(Wnd) + wc->wndExtra);
-
-  if (parent != NULL) {
-    parent_win = parent->window;
-  } else {
-    parent_win = DefaultRootWindow(disp);
-  }
-
-  /* Create our GC */
-  wnd->hdc = w32x_CreateDC();
-
-  /* parent window */
-  wnd->window = XCreateSimpleWindow(disp, parent_win,
-    x, y, width, height,
-    dwStyle & WS_BORDER ? 1 : 0,
-    wc->border_pixel, wc->background_pixel);
-  wnd->label = strdup(lpWindowName);
-  wnd->proc = wc->proc;
-  wnd->parent = parent;
-  class_hint.res_name = wnd->label;
-  class_hint.res_class = wc->name;
-  XSetClassHint(disp, wnd->window, &class_hint);
-
-  XSaveContext(disp, wnd->window, ctxt, (XPointer)wnd);
-
-  XSelectInput(disp, wnd->window,
-    ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask |
-    StructureNotifyMask);
-
-  /* Parent will explicitly call ShowWindow when ready */
-  if (parent != NULL)
-    ShowWindow(wnd);
-
-  /* For top level windows we want to do some extra special case
-   * processing */
-  if (parent == NULL) {
-    SetWindowName(wnd, lpWindowName);
-
-    /* Use the WM_DELETE_WINDOW atom to tell the window manager that we want
-     * to handle when this window is closed/destroyed */
-    XSetWMProtocols(disp, wnd->window, &WM_DELETE_WINDOW, 1);
-  }
-
-  return wnd;
 }
 
 void
