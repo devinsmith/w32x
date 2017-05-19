@@ -39,6 +39,17 @@ struct WndClass {
   size_t wndExtra;
 };
 
+struct WndDC {
+  HWND wnd;
+
+  int fgPixel;
+  int bgPixel;
+  GC gc;
+  struct GDIOBJ *selectedPen;
+  struct GDIOBJ *selectedBrush;
+  struct GDIOBJ *selectedFont;
+};
+
 HDC w32x_CreateDC(void);
 WndClass *get_class_by_name(const char *name);
 

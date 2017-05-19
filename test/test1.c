@@ -71,7 +71,8 @@ main(int argc, char *argv[])
 
 
   /* parent window */
-  top = CreateWindow("TopWindow", "Test1", WS_BORDER, 200, 200, 500, 300, NULL);
+  top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1", WS_BORDER,
+      200, 200, 500, 300, NULL);
 
   CreateWindow("MenuBar", "Nothing", 0, 0, 0, 500, 25, top);
 
@@ -79,6 +80,7 @@ main(int argc, char *argv[])
   CreateWindow("RadioButton", "Radio 2", WS_BORDER, 5, 60, 100, 25, top);
 
   ShowWindow(top);
+  UpdateWindow(top);
 
   while ((bRet = GetMessage(&msg, NULL)) != 0) {
     DispatchMessage(&msg);

@@ -45,17 +45,6 @@ struct GDIOBJ {
   BOOL selected;
 };
 
-struct WndDC {
-  HWND wnd;
-
-  int fgPixel;
-  int bgPixel;
-  GC gc;
-  struct GDIOBJ *selectedPen;
-  struct GDIOBJ *selectedBrush;
-  struct GDIOBJ *selectedFont;
-};
-
 static bool stock_inited = false;
 static struct GDIOBJ *system_font = NULL;
 static struct GDIOBJ *dc_brush = NULL;
@@ -171,11 +160,11 @@ HDC w32x_CreateDC(void)
 
 HDC BeginPaint(HWND wnd)
 {
-  wnd->hdc->wnd = wnd;
+  HDC dc = GetDC(wnd);
 
   SendMessage(wnd, WM_NCPAINT, 0, 0);
 
-  return wnd->hdc;
+  return dc;
 }
 
 HGDIOBJ SelectObject(HDC hdc, HGDIOBJ hgdiobj)

@@ -25,6 +25,9 @@
 #define GWL_EXSTYLE -20
 #define GWL_STYLE -16
 
+/* Extended windows styles */
+#define WS_EX_CLIENTEDGE 0x00000200
+
 HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
   DWORD dwStyle, int x, int y, int width, int height, HWND parent);
 
@@ -32,9 +35,11 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   const char *lpWindowName, DWORD dwStyle, int x, int y, int nWidth,
   int nHeight, HWND hWndParent);
 
+HDC GetDC(HWND hwnd);
 LONG GetWindowLong(HWND hWnd, int nIndex);
 BOOL GetWindowRect(HWND wnd, LPRECT rect);
 
 int ReleaseDC(HWND hWnd, HDC hDC);
+BOOL UpdateWindow(HWND hwnd);
 
 #endif /* __WINUSER_H__ */

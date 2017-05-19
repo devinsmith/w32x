@@ -19,13 +19,38 @@
 #include <string.h>
 #include <windows.h>
 
+static int handle_ncpaint(HWND hwnd)
+{
+  RECT wr;
+  LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+
+  GetWindowRect(hwnd, &wr);
+
+
+  if ((exStyle & WS_EX_CLIENTEDGE)) {
+    HDC hdc = GetDC(hwnd);
+    SelectObject(hdc, GetStockObject(DC_BRUSH));
+    SetDCBrushColor(hdc, RGB(0xd0, 0xd0, 0xd0));
+    Rectangle(hdc, 0, 0, wr.right - 1, wr.bottom - 1);
+    SetDCBrushColor(hdc, RGB(0xc0, 0xc0, 0xc0));
+    Rectangle(hdc, 1, 1, wr.right - 3, wr.bottom - 3);
+    SetDCBrushColor(hdc, RGB(0x00, 0x00, 0x00));
+    Rectangle(hdc, 2, 2, wr.right - 5, wr.bottom - 5);
+
+    ReleaseDC(hwnd, hdc);
+  }
+  return 0;
+}
+
 int
 DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
   switch (msg) {
   case WM_NCPAINT:
+    handle_ncpaint(wnd);
     break;
   case WM_PAINT:
+    BeginPaint(wnd);
     break;
   case WM_CLOSE:
     printf("Request to close window\n");

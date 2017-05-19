@@ -100,6 +100,13 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   return wnd;
 }
 
+HDC GetDC(HWND hwnd)
+{
+  /* For now, just return the private windows DC */
+  hwnd->hdc->wnd = hwnd;
+  return hwnd->hdc;
+}
+
 LONG GetWindowLong(HWND hWnd, int nIndex)
 {
   /* TODO: Not all indexes are handled. */
@@ -137,4 +144,11 @@ int ReleaseDC(HWND hwnd, HDC hdc)
 {
   /* This is currently a no-op until we have other types of DCs */
   return 0;
+}
+
+BOOL UpdateWindow(HWND hwnd)
+{
+  SendMessage(hwnd, WM_PAINT, 0, 0);
+
+  return TRUE;
 }
