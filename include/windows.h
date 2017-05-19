@@ -158,8 +158,6 @@ void SetWindowName(HWND wnd, const char *name);
 int GetWindowText(HWND wnd, char *lpString, int nMaxCount);
 void DestroyWindow(HWND wnd);
 
-BOOL GetWindowRect(HWND wnd, LPRECT rect);
-
 HDC BeginPaint(HWND wnd);
 HGDIOBJ GetStockObject(int fnObject);
 HBRUSH CreateSolidBrush(COLORREF crColor);
@@ -182,5 +180,7 @@ int DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 BOOL GetMessage(LPMSG msg, Wnd *wnd);
 int DispatchMessage(const MSG *msg);
 void PostQuitMessage(int nExitCode);
+
+#include <winuser.h>
 
 #endif /* __WINDOWS_H__ */

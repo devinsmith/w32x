@@ -12,7 +12,8 @@ LIST(APPEND libw32x_src
   src/button.c
   src/defwnd.c
   src/graphics.c
-  src/w32x.c)
+  src/w32x.c
+  src/winuser.c)
 
 ADD_LIBRARY(w32x STATIC ${libw32x_src})
 

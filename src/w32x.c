@@ -248,25 +248,6 @@ void *GetWindowLongPtr(HWND wnd, int nIndex)
   return wnd->wndExtra;
 }
 
-BOOL GetWindowRect(HWND wnd, LPRECT rect)
-{
-	Window root_return;
-	int x_return, y_return;
-	unsigned int width_return, height_return;
-	unsigned int border_width_return;
-	unsigned int depth_return;
-
-	XGetGeometry(disp, wnd->window, &root_return, &x_return, &y_return,
-	    &width_return, &height_return, &border_width_return, &depth_return);
-
-  rect->left = x_return;
-  rect->top = y_return;
-  rect->right = width_return;
-  rect->bottom = height_return;
-
-  return TRUE;
-}
-
 void PostQuitMessage(int nExitCode)
 {
   struct msgq_entry *q_msg;
