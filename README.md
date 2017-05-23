@@ -8,7 +8,7 @@ sudo apt-get install libx11-dev libxft-dev
 ```
 
 # Building
-You can use cmake to build the sample library and tests.
+You can use cmake to build the static library and tests.
 ```
 mkdir build
 cd build
