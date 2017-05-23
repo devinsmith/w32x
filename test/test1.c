@@ -73,6 +73,7 @@ main(int argc, char *argv[])
   /* parent window */
   top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1", WS_BORDER,
       200, 200, 500, 300, NULL);
+  SetMenu(top);
 
   CreateWindow("MenuBar", "Nothing", 0, 0, 0, 500, 25, top);
 

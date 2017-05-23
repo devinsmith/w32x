@@ -35,11 +35,13 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   const char *lpWindowName, DWORD dwStyle, int x, int y, int nWidth,
   int nHeight, HWND hWndParent);
 
+BOOL GetMenu(HWND hwnd);
 HDC GetDC(HWND hwnd);
 LONG GetWindowLong(HWND hWnd, int nIndex);
 BOOL GetWindowRect(HWND wnd, LPRECT rect);
 
 int ReleaseDC(HWND hWnd, HDC hDC);
+BOOL SetMenu(HWND hwnd);
 BOOL UpdateWindow(HWND hwnd);
 
 #endif /* __WINUSER_H__ */

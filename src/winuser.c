@@ -107,6 +107,11 @@ HDC GetDC(HWND hwnd)
   return hwnd->hdc;
 }
 
+BOOL GetMenu(HWND hwnd)
+{
+  return hwnd->hasMenu;
+}
+
 LONG GetWindowLong(HWND hWnd, int nIndex)
 {
   /* TODO: Not all indexes are handled. */
@@ -144,6 +149,13 @@ int ReleaseDC(HWND hwnd, HDC hdc)
 {
   /* This is currently a no-op until we have other types of DCs */
   return 0;
+}
+
+BOOL SetMenu(HWND hwnd)
+{
+  hwnd->hasMenu = 1;
+
+  return TRUE;
 }
 
 BOOL UpdateWindow(HWND hwnd)

@@ -122,6 +122,7 @@ typedef struct Wnd Wnd;
 typedef struct WndClass WndClass;
 typedef struct WndDC *HDC;
 typedef struct Wnd *HWND;
+typedef struct WndMenu *HMENU;
 
 typedef struct tagWNDCLASS {
   const char *Name;

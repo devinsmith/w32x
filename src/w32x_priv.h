@@ -25,6 +25,7 @@ struct Wnd {
   char *label;
   int isTopLevel;
   HDC hdc;
+  int hasMenu;
   int (*proc)(Wnd *wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 
   char wndExtra[];

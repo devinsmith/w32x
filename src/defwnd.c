@@ -28,14 +28,18 @@ static int handle_ncpaint(HWND hwnd)
 
 
   if ((exStyle & WS_EX_CLIENTEDGE)) {
+    int top = 0;
+    if (GetMenu(hwnd)) {
+      top += 25;
+    }
     HDC hdc = GetDC(hwnd);
     SelectObject(hdc, GetStockObject(DC_BRUSH));
     SetDCBrushColor(hdc, RGB(0xd0, 0xd0, 0xd0));
-    Rectangle(hdc, 0, 0, wr.right - 1, wr.bottom - 1);
+    Rectangle(hdc, 0, top, wr.right - 1, wr.bottom - 1);
     SetDCBrushColor(hdc, RGB(0xc0, 0xc0, 0xc0));
-    Rectangle(hdc, 1, 1, wr.right - 2, wr.bottom - 2);
+    Rectangle(hdc, 1, top + 1, wr.right - 2, wr.bottom - 2);
     SetDCBrushColor(hdc, RGB(0x00, 0x00, 0x00));
-    Rectangle(hdc, 2, 2, wr.right - 3, wr.bottom - 3);
+    Rectangle(hdc, 2, top + 2, wr.right - 3, wr.bottom - 3);
 
     ReleaseDC(hwnd, hdc);
   }
