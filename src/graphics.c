@@ -239,7 +239,7 @@ BOOL Rectangle(HDC hdc, int nLeftRect, int nTopRect,
   setFgColor(hdc, hdc->selectedBrush->crColor);
 
   XDrawRectangle(disp, hdc->wnd->window, hdc->gc, nLeftRect, nTopRect,
-      nRightRect, nBottomRect);
+      nRightRect - nLeftRect, nBottomRect - nTopRect);
 
   return TRUE;
 }

@@ -33,9 +33,9 @@ static int handle_ncpaint(HWND hwnd)
     SetDCBrushColor(hdc, RGB(0xd0, 0xd0, 0xd0));
     Rectangle(hdc, 0, 0, wr.right - 1, wr.bottom - 1);
     SetDCBrushColor(hdc, RGB(0xc0, 0xc0, 0xc0));
-    Rectangle(hdc, 1, 1, wr.right - 3, wr.bottom - 3);
+    Rectangle(hdc, 1, 1, wr.right - 2, wr.bottom - 2);
     SetDCBrushColor(hdc, RGB(0x00, 0x00, 0x00));
-    Rectangle(hdc, 2, 2, wr.right - 5, wr.bottom - 5);
+    Rectangle(hdc, 2, 2, wr.right - 3, wr.bottom - 3);
 
     ReleaseDC(hwnd, hdc);
   }
