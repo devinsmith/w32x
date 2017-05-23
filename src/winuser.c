@@ -29,6 +29,22 @@ extern Display *disp;
 extern XContext ctxt;
 extern Atom WM_DELETE_WINDOW;
 
+/* internals */
+static void w32x_get_parent_client_offset(HWND parent, int *x, int *y)
+{
+  if (parent == NULL)
+    return;
+
+  if ((parent->dwExStyle & WS_EX_CLIENTEDGE)) {
+    *x += 3;
+    *y += 3;
+  }
+
+  if (GetMenu(parent)) {
+    *y += 25;
+  }
+}
+
 HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
   DWORD dwStyle, int x, int y, int width, int height, HWND parent)
 {
@@ -64,6 +80,8 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   /* Save the styles */
   wnd->dwStyle = dwStyle;
   wnd->dwExStyle = dwExStyle;
+
+  w32x_get_parent_client_offset(parent, &x, &y);
 
   /* parent window */
   wnd->window = XCreateSimpleWindow(disp, parent_win,
