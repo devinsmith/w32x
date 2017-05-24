@@ -35,13 +35,14 @@ static void
 drawRadioButton(HWND wnd, int x, int y, unsigned int w,
     unsigned int h, int clicked)
 {
+  PAINTSTRUCT ps;
   struct RadioButtonInfo *extra;
   char label[256];
 
   GetWindowText(wnd, label, sizeof(label));
   extra = GetWindowLongPtr(wnd, 0);
 
-  HDC hdc = BeginPaint(wnd);
+  HDC hdc = BeginPaint(wnd, &ps);
 
   SelectObject(hdc, GetStockObject(DC_BRUSH));
   SelectObject(hdc, GetStockObject(BLACK_PEN));

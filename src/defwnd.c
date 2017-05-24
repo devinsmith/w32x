@@ -49,12 +49,14 @@ static int handle_ncpaint(HWND hwnd)
 int
 DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
+  PAINTSTRUCT ps;
+
   switch (msg) {
   case WM_NCPAINT:
     handle_ncpaint(wnd);
     break;
   case WM_PAINT:
-    BeginPaint(wnd);
+    BeginPaint(wnd, &ps);
     break;
   case WM_CLOSE:
     printf("Request to close window\n");

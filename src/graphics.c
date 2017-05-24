@@ -172,15 +172,6 @@ HDC w32x_CreateDC(void)
   return dc;
 }
 
-HDC BeginPaint(HWND wnd)
-{
-  HDC dc = GetDC(wnd);
-
-  SendMessage(wnd, WM_NCPAINT, 0, 0);
-
-  return dc;
-}
-
 HGDIOBJ SelectObject(HDC hdc, HGDIOBJ hgdiobj)
 {
   HGDIOBJ old = NULL;

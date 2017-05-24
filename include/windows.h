@@ -51,6 +51,7 @@
  * 32 bit and the API behaves similarily to Windows.
  */
 
+typedef unsigned char BYTE;
 typedef int BOOL;
 typedef int LONG;
 typedef unsigned int DWORD;
@@ -157,7 +158,6 @@ void SetWindowName(HWND wnd, const char *name);
 int GetWindowText(HWND wnd, char *lpString, int nMaxCount);
 void DestroyWindow(HWND wnd);
 
-HDC BeginPaint(HWND wnd);
 HGDIOBJ GetStockObject(int fnObject);
 HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor);
 

@@ -28,6 +28,16 @@
 /* Extended windows styles */
 #define WS_EX_CLIENTEDGE 0x00000200
 
+typedef struct tagPAINTSTRUCT {
+  HDC  hdc;
+  BOOL fErase;
+  RECT rcPaint;
+  BOOL fRestore;
+  BOOL fIncUpdate;
+  BYTE rgbReserved[32];
+} PAINTSTRUCT, *PPAINTSTRUCT;
+
+HDC BeginPaint(HWND wnd, PAINTSTRUCT *lpPaint);
 HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
   DWORD dwStyle, int x, int y, int width, int height, HWND parent);
 
