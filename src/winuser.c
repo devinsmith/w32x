@@ -81,7 +81,7 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   wnd->dwStyle = dwStyle;
   wnd->dwExStyle = dwExStyle;
 
-  w32x_get_parent_client_offset(parent, &x, &y);
+//  w32x_get_parent_client_offset(parent, &x, &y);
 
   /* parent window */
   wnd->window = XCreateSimpleWindow(disp, parent_win,
