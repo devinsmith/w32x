@@ -84,6 +84,9 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
     parent_win = DefaultRootWindow(disp);
   }
 
+  wnd->width = width;
+  wnd->height = height;
+
   /* Create our GC */
   wnd->hdc = w32x_CreateDC();
 

@@ -22,6 +22,10 @@ struct Wnd {
   DWORD dwStyle;
   DWORD dwExStyle;
   Wnd *parent;
+
+  int width;
+  int height;
+
   char *label;
   int isTopLevel;
   HDC hdc;

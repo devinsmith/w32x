@@ -83,8 +83,6 @@ typedef void *HPEN;
 #define WM_LBUTTONDOWN                  0x0201
 #define WM_LBUTTONUP                    0x0202
 
-#define WS_BORDER   0x00800000L
-
 #define MSG_INT 1
 #define MSG_PTR 2
 
