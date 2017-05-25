@@ -71,14 +71,16 @@ main(int argc, char *argv[])
 
 
   /* parent window */
-  top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1", WS_BORDER,
-      200, 200, 500, 300, NULL);
+  top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1",
+      WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL);
   SetMenu(top);
 
-  CreateWindow("MenuBar", "Nothing", 0, 0, 0, 500, 25, top);
+  CreateWindow("MenuBar", "Nothing", WS_CHILD, 0, 0, 500, 25, top);
 
-  CreateWindow("RadioButton", "Radio 1", WS_BORDER, 5, 30, 100, 25, top);
-  CreateWindow("RadioButton", "Radio 2", WS_BORDER, 5, 60, 100, 25, top);
+  CreateWindow("RadioButton", "Radio 1", WS_CHILD | WS_BORDER, 5, 30,
+      100, 25, top);
+  CreateWindow("RadioButton", "Radio 2", WS_CHILD | WS_BORDER, 5, 60,
+      100, 25, top);
 
   ShowWindow(top);
   UpdateWindow(top);
