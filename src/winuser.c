@@ -47,11 +47,12 @@ static void w32x_get_parent_client_offset(HWND parent, int *x, int *y)
 
 HDC BeginPaint(HWND wnd, PAINTSTRUCT *lpPaint)
 {
-  HDC dc = GetDC(wnd);
+  lpPaint->hdc = GetDC(wnd);
+  lpPaint->fErase = FALSE;
 
   SendMessage(wnd, WM_NCPAINT, 0, 0);
 
-  return dc;
+  return lpPaint->hdc;
 }
 
 HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
