@@ -30,7 +30,7 @@ static int handle_ncpaint(HWND hwnd)
   if ((exStyle & WS_EX_CLIENTEDGE)) {
     int top = 0;
     if (GetMenu(hwnd)) {
-      top += 25;
+      top += GetSystemMetrics(SM_CYMENU);
     }
     HDC hdc = GetDC(hwnd);
     SelectObject(hdc, GetStockObject(DC_BRUSH));

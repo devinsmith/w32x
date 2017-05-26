@@ -75,7 +75,8 @@ main(int argc, char *argv[])
       WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL);
   SetMenu(top);
 
-  CreateWindow("MenuBar", "Nothing", WS_CHILD, 0, 0, 500, 25, top);
+  CreateWindow("MenuBar", "Nothing", WS_CHILD, 0, 0, 500,
+      GetSystemMetrics(SM_CYMENU), top);
 
   CreateWindow("RadioButton", "Radio 1", WS_CHILD | WS_BORDER, 5, 30,
       100, 25, top);

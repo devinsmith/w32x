@@ -25,6 +25,9 @@
 #define GWL_EXSTYLE -20
 #define GWL_STYLE -16
 
+/* GetSystemMetrics indexes */
+#define SM_CYMENU 15
+
 /* Standard window styles (WS) */
 #define WS_OVERLAPPED   0x00000000
 #define WS_TABSTOP      0x00010000
@@ -81,6 +84,7 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
 
 BOOL GetMenu(HWND hwnd);
 HDC GetDC(HWND hwnd);
+int GetSystemMetrics(int nIndex);
 LONG GetWindowLong(HWND hWnd, int nIndex);
 BOOL GetWindowRect(HWND wnd, LPRECT rect);
 

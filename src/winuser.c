@@ -41,7 +41,7 @@ static void w32x_get_parent_client_offset(HWND parent, int *x, int *y)
   }
 
   if (GetMenu(parent)) {
-    *y += 25;
+    *y += GetSystemMetrics(SM_CYMENU);
   }
 }
 
@@ -141,6 +141,15 @@ HDC GetDC(HWND hwnd)
 BOOL GetMenu(HWND hwnd)
 {
   return hwnd->hasMenu;
+}
+
+int GetSystemMetrics(int nIndex)
+{
+  switch (nIndex) {
+  case SM_CYMENU:
+    return 19;
+  }
+  return 0;
 }
 
 LONG GetWindowLong(HWND hWnd, int nIndex)
