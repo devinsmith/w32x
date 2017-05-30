@@ -76,12 +76,6 @@ typedef LONG_PTR LPARAM;
 typedef DWORD COLORREF;
 #define RGB(r,g,b) ((COLORREF)((r) | ((g) << 8) | ((b) << 16)))
 
-/* GDI objects */
-typedef void *HGDIOBJ;
-typedef void *HFONT;
-typedef void *HBRUSH;
-typedef void *HPEN;
-
 /* Events */
 #define WM_CREATE                       0x0001
 #define WM_DESTROY                      0x0002
@@ -95,32 +89,7 @@ typedef void *HPEN;
 #define MSG_INT 1
 #define MSG_PTR 2
 
-#define WHITE_BRUSH 0
-#define LTGRAY_BRUSH 1
-#define GRAY_BRUSH 2
-#define DKGRAY_BRUSH 3
-#define BLACK_BRUSH 4
-#define NULL_BRUSH 5
-#define HOLLOW_BRUSH NULL_BRUSH
-#define WHITE_PEN 6
-#define BLACK_PEN 7
-#define NULL_PEN 8
-#define OEM_FIXED_FONT 10
-#define ANSI_FIXED_FONT 11
-#define ANSI_VAR_FONT 12
-#define SYSTEM_FONT 13
-#define DEVICE_DEFAULT_FONT 14
-#define DEFAULT_PALETTE 15
-#define SYSTEM_FIXED_FONT 16
-#define DEFAULT_GUI_FONT 17
-#define DC_BRUSH 18
-#define DC_PEN 19
-
-#define STOCK_LAST 19
-
-
 #define CLR_INVALID 0xFFFFFFFF
-
 
 /* Forward declartions */
 struct Wnd;
@@ -155,6 +124,9 @@ typedef struct tagMSG {
 } MSG;
 typedef MSG *LPMSG;
 
+#include <winuser.h>
+#include <wingdi.h>
+
 int w32x_init(const char *display_name);
 
 
@@ -185,8 +157,5 @@ int DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 BOOL GetMessage(LPMSG msg, Wnd *wnd);
 int DispatchMessage(const MSG *msg);
 void PostQuitMessage(int nExitCode);
-
-#include <winuser.h>
-#include <wingdi.h>
 
 #endif /* __WINDOWS_H__ */
