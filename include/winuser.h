@@ -82,8 +82,9 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   const char *lpWindowName, DWORD dwStyle, int x, int y, int nWidth,
   int nHeight, HWND hWndParent);
 
-BOOL GetMenu(HWND hwnd);
+BOOL GetClientRect(HWND wnd, LPRECT rect);
 HDC GetDC(HWND hwnd);
+BOOL GetMenu(HWND hwnd);
 int GetSystemMetrics(int nIndex);
 LONG GetWindowLong(HWND hWnd, int nIndex);
 BOOL GetWindowRect(HWND wnd, LPRECT rect);

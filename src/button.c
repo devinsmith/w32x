@@ -76,7 +76,7 @@ RadioButtonProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
   RECT winRect;
 
-  GetWindowRect(wnd, &winRect);
+  GetClientRect(wnd, &winRect);
 
   switch (msg) {
   case WM_LBUTTONDOWN:

@@ -131,6 +131,17 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   return wnd;
 }
 
+BOOL GetClientRect(HWND wnd, LPRECT rect)
+{
+  rect->left = 0;
+  rect->top = 0;
+  rect->right = wnd->width;
+  rect->bottom = wnd->height;
+
+  return TRUE;
+}
+
+
 HDC GetDC(HWND hwnd)
 {
   /* For now, just return the private windows DC */
@@ -168,19 +179,16 @@ LONG GetWindowLong(HWND hWnd, int nIndex)
 
 BOOL GetWindowRect(HWND wnd, LPRECT rect)
 {
-  Window root_return;
+  Window child;
   int x_return, y_return;
-  unsigned int width_return, height_return;
-  unsigned int border_width_return;
-  unsigned int depth_return;
 
-  XGetGeometry(disp, wnd->window, &root_return, &x_return, &y_return,
-    &width_return, &height_return, &border_width_return, &depth_return);
+  XTranslateCoordinates(disp, wnd->window, DefaultRootWindow(disp),
+      0, 0, &x_return, &y_return, &child);
 
   rect->left = x_return;
   rect->top = y_return;
-  rect->right = width_return;
-  rect->bottom = height_return;
+  rect->right = x_return + wnd->width;
+  rect->bottom = y_return + wnd->height;
 
   return TRUE;
 }

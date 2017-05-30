@@ -24,8 +24,8 @@ static int handle_ncpaint(HWND hwnd)
   RECT wr;
   LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
 
-  GetWindowRect(hwnd, &wr);
-
+  /* Not technically correct, becuse the X11 WM paints our NC area. */
+  GetClientRect(hwnd, &wr);
 
   if ((exStyle & WS_EX_CLIENTEDGE)) {
     int top = 0;
