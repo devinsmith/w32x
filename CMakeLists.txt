@@ -12,6 +12,7 @@ LIST(APPEND libw32x_src
   src/button.c
   src/defwnd.c
   src/graphics.c
+  src/rect.c
   src/w32x.c
   src/winuser.c)
 

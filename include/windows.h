@@ -114,6 +114,11 @@ typedef struct tagLOGBRUSH {
   ULONG_PTR lbHatch;
 } LOGBRUSH, *PLOGBRUSH;
 
+typedef struct tagPOINT {
+  LONG x;
+  LONG y;
+} POINT, *PPOINT;
+
 typedef struct tagRECT {
   LONG left;
   LONG top;
@@ -163,5 +168,18 @@ int DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 BOOL GetMessage(LPMSG msg, HWND wnd);
 int DispatchMessage(const MSG *msg);
 void PostQuitMessage(int nExitCode);
+
+/* Rect utility functions (rect.c) */
+BOOL SetRect(RECT *r, int left, int top, int right, int bottom);
+BOOL SetRectEmpty(RECT *r);
+BOOL IsRectEmpty(const RECT *r);
+BOOL IntersectRect(RECT *r1, const RECT *r2, const RECT *r3);
+BOOL InflateRect(RECT *r, int dx, int dy);
+BOOL OffsetRect(RECT *r, int xoff, int yoff);
+BOOL EqualRect(const RECT *r1, const RECT *r2);
+BOOL PtInRect(const RECT *r, POINT p);
+BOOL CopyRect(RECT *dst, const RECT *src);
+BOOL UnionRect(RECT *dst, const RECT *r1, const RECT *r2);
+BOOL SubtractRect(RECT *dst, const RECT *r1, const RECT *r2);
 
 #endif /* __WINDOWS_H__ */
