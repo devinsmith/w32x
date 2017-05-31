@@ -36,9 +36,11 @@
 #include <windows.h>
 #include "w32x_priv.h"
 
-#define PEN_TYPE 1
-#define BRUSH_TYPE 2
-#define FONT_TYPE 3
+/* Pietrek - Windows Internals (p.369) */
+#define PEN_MAGIC     0x4F47 /* GO */
+#define BRUSH_MAGIC   0x4F48 /* HO */
+#define FONT_MAGIC    0x4F49 /* IO */
+#define REGION_MAGIC  0x4F4C /* LO */
 
 #define XUI_DEFAULT_FONT "7x14"
 
@@ -47,11 +49,12 @@ extern int blackpixel;
 extern int whitepixel;
 
 struct GDIOBJ {
-  int objType; /* see above */
+  short obj_sig; /* see above */
   COLORREF crColor;
   int penStyle; /* used only for pens */
   int nWidth; /* width of pen */
   XFontStruct *font; /* font */
+  Region region;
 
   BOOL selected;
 };
@@ -64,16 +67,16 @@ static struct GDIOBJ *black_pen = NULL;
 static void init_stock_objects(void)
 {
   system_font = calloc(1, sizeof(struct GDIOBJ));
-  system_font->objType = FONT_TYPE;
+  system_font->obj_sig = FONT_MAGIC ;
   system_font->font = XLoadQueryFont(disp, XUI_DEFAULT_FONT);
 
   /* The default DC_BRUSH color is WHITE */
   dc_brush = calloc(1, sizeof(struct GDIOBJ));
-  dc_brush->objType = BRUSH_TYPE;
+  dc_brush->obj_sig = BRUSH_MAGIC;
   dc_brush->crColor = RGB(0xff, 0xff, 0xff);
 
   black_pen = calloc(1, sizeof(struct GDIOBJ));
-  black_pen->objType = PEN_TYPE;
+  black_pen->obj_sig= PEN_MAGIC;
   black_pen->crColor = RGB(0x00, 0x00, 0x00);
 
   stock_inited = true;
@@ -105,7 +108,7 @@ HBRUSH CreateBrushIndirect(const LOGBRUSH *lplb)
     return NULL;
 
   obj = calloc(1, sizeof(struct GDIOBJ));
-  obj->objType = BRUSH_TYPE;
+  obj->obj_sig = BRUSH_MAGIC;
   obj->crColor = lplb->lbColor;
   return obj;
 }
@@ -124,7 +127,7 @@ HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor)
 {
   struct GDIOBJ *obj = calloc(1, sizeof(struct GDIOBJ));
 
-  obj->objType = PEN_TYPE;
+  obj->obj_sig = PEN_MAGIC;
   obj->crColor = crColor;
   obj->penStyle = fnPenStyle;
   obj->nWidth = nWidth;
@@ -189,19 +192,21 @@ HGDIOBJ SelectObject(HDC hdc, HGDIOBJ hgdiobj)
   struct GDIOBJ *obj = hgdiobj;
 
   /* Determine the type of object this is */
-  switch (obj->objType) {
-  case PEN_TYPE:
+  switch (obj->obj_sig) {
+  case PEN_MAGIC:
     old = hdc->selectedPen;
     hdc->selectedPen = hgdiobj;
     break;
-  case BRUSH_TYPE:
+  case BRUSH_MAGIC:
     old = hdc->selectedBrush;
     hdc->selectedBrush = hgdiobj;
     break;
-  case FONT_TYPE:
+  case FONT_MAGIC:
     old = hdc->selectedFont;
     hdc->selectedFont = hgdiobj;
     break;
+  default:
+    printf("Unknown GDI object type\n");
   }
 
   return old;
@@ -260,5 +265,46 @@ BOOL Rectangle(HDC hdc, int nLeftRect, int nTopRect,
   return TRUE;
 }
 
+static void
+region_get_clip_box(HRGN hrgn, XRectangle* rect)
+{
+	XClipBox(hrgn->region, rect);
+}
+
+static int
+region_get_complexity(HRGN hrgn)
+{
+	int ret;
+	if (XEmptyRegion(hrgn->region)) {
+		ret = NULLREGION;
+	} else {
+		XRectangle r;
+		XClipBox(hrgn->region, &r);
+		if (XRectInRegion(hrgn->region, r.x, r.y, r.width, r.height)) {
+			ret = SIMPLEREGION;
+		} else {
+			ret = COMPLEXREGION;
+		}
+	}
+	return ret;
+}
+
+int
+GetRgnBox(HRGN hrgn, RECT *r)
+{
+	if (hrgn->obj_sig != REGION_MAGIC)
+		return RGN_ERROR;
+
+	if (r != NULL) {
+		XRectangle rect;
+
+		region_get_clip_box(hrgn, &rect);
+		r->left   = rect.x;
+		r->right  = rect.x + rect.width;
+		r->top    = rect.y;
+		r->bottom = rect.y + rect.height;
+	}
+	return region_get_complexity(hrgn);
+}
 
 

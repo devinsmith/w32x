@@ -55,6 +55,12 @@
 #define DC_PEN 19
 #define STOCK_LAST 19
 
+#define ERROR 0
+#define NULLREGION 1
+#define SIMPLEREGION 2
+#define COMPLEXREGION 3
+#define RGN_ERROR ERROR
+
 /* Brush styles */
 #define BS_SOLID 0
 
@@ -73,5 +79,7 @@ typedef struct tagLOGBRUSH {
 
 HBRUSH CreateSolidBrush(COLORREF crColor);
 HBRUSH CreateBrushIndirect(const LOGBRUSH *lplb);
+
+int GetRgnBox(HRGN hrgn, RECT *lprc);
 
 #endif /* __WINGDI_H__ */
