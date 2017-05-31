@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2000 Masaru OKI
+ * Copyright (c) 2001 TAMURA Kent
  * Copyright (c) 2017 Devin Smith <devin@devinsmith.net>
  * All rights reserved.
  *
