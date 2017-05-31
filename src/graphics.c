@@ -307,4 +307,29 @@ GetRgnBox(HRGN hrgn, RECT *r)
 	return region_get_complexity(hrgn);
 }
 
+static void
+region_union_rect(HRGN rgn, int left, int top, int right, int bottom)
+{
+	XRectangle rect;
+	rect.x = left;
+	rect.y = top;
+	rect.width = right - left;
+	rect.height = bottom - top;
+	XUnionRectWithRegion(&rect, rgn->region, rgn->region);
+}
+
+BOOL
+SetRectRgn(HRGN hrgn, int left, int top, int right, int bottom)
+{
+	if (hrgn->obj_sig != REGION_MAGIC)
+		return FALSE;
+
+	if (hrgn->region != NULL) {
+		XDestroyRegion(hrgn->region);
+	}
+	hrgn->region = XCreateRegion();
+	region_union_rect(hrgn, left, top, right, bottom);
+	return TRUE;
+}
+
 

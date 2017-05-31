@@ -81,5 +81,6 @@ HBRUSH CreateSolidBrush(COLORREF crColor);
 HBRUSH CreateBrushIndirect(const LOGBRUSH *lplb);
 
 int GetRgnBox(HRGN hrgn, RECT *lprc);
+BOOL SetRectRgn(HRGN hrgn, int left, int top, int right, int bottom);
 
 #endif /* __WINGDI_H__ */
