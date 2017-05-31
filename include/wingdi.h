@@ -61,25 +61,23 @@
 #define COMPLEXREGION 3
 #define RGN_ERROR ERROR
 
+#define RGN_AND 1
+#define RGN_OR 2
+#define RGN_XOR 3
+#define RGN_DIFF 4
+#define RGN_COPY 5
+#define RGN_MIN RGN_AND
+#define RGN_MAX RGN_COPY
+
 /* Brush styles */
 #define BS_SOLID 0
 
-/* GDI objects */
-typedef struct GDIOBJ *HGDIOBJ;
-typedef struct GDIOBJ *HFONT;
-typedef struct GDIOBJ *HBRUSH;
-typedef struct GDIOBJ *HPEN;
-typedef struct GDIOBJ *HRGN;
-
-typedef struct tagLOGBRUSH {
-  UINT      lbStyle;
-  COLORREF  lbColor;
-  ULONG_PTR lbHatch;
-} LOGBRUSH, *PLOGBRUSH;
+#define CLR_INVALID 0xFFFFFFFF
 
 HBRUSH CreateSolidBrush(COLORREF crColor);
 HBRUSH CreateBrushIndirect(const LOGBRUSH *lplb);
 
+int CombineRgn(HRGN dest, HRGN src1, HRGN src2, int combineMode);
 int GetRgnBox(HRGN hrgn, RECT *lprc);
 BOOL SetRectRgn(HRGN hrgn, int left, int top, int right, int bottom);
 

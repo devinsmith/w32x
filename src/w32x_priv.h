@@ -32,7 +32,7 @@ struct Wnd {
   Window window;
   DWORD dwStyle;
   DWORD dwExStyle;
-  Wnd *parent;
+  HWND parent;
 
   int width;
   int height;
@@ -41,10 +41,11 @@ struct Wnd {
   int isTopLevel;
   HDC hdc;
   int hasMenu;
-  int (*proc)(Wnd *wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+  int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 
   char wndExtra[];
 };
+typedef struct Wnd Wnd;
 
 struct WndClass {
   struct WndClass *next;

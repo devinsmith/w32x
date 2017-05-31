@@ -88,16 +88,7 @@ typedef DWORD COLORREF;
 #define WM_LBUTTONDOWN                  0x0201
 #define WM_LBUTTONUP                    0x0202
 
-#define MSG_INT 1
-#define MSG_PTR 2
-
-#define CLR_INVALID 0xFFFFFFFF
-
-/* Forward declartions */
-struct Wnd;
-struct WndClass;
-
-typedef struct Wnd Wnd;
+/* Type declarations */
 typedef struct WndClass WndClass;
 typedef struct WndDC *HDC;
 typedef struct Wnd *HWND;
@@ -109,6 +100,19 @@ typedef struct tagWNDCLASS {
   int (*EventProc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
   size_t wndExtra;
 } WNDCLASS;
+
+/* GDI objects */
+typedef struct GDIOBJ *HGDIOBJ;
+typedef struct GDIOBJ *HFONT;
+typedef struct GDIOBJ *HBRUSH;
+typedef struct GDIOBJ *HPEN;
+typedef struct GDIOBJ *HRGN;
+
+typedef struct tagLOGBRUSH {
+  UINT      lbStyle;
+  COLORREF  lbColor;
+  ULONG_PTR lbHatch;
+} LOGBRUSH, *PLOGBRUSH;
 
 typedef struct tagRECT {
   LONG left;
@@ -156,7 +160,7 @@ void *GetWindowLongPtr(HWND wnd, int nIndex);
 int SendMessage(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 int DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 
-BOOL GetMessage(LPMSG msg, Wnd *wnd);
+BOOL GetMessage(LPMSG msg, HWND wnd);
 int DispatchMessage(const MSG *msg);
 void PostQuitMessage(int nExitCode);
 

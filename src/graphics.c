@@ -318,6 +318,32 @@ region_union_rect(HRGN rgn, int left, int top, int right, int bottom)
 	XUnionRectWithRegion(&rect, rgn->region, rgn->region);
 }
 
+int
+CombineRgn(HRGN dest, HRGN src1, HRGN src2, int combineMode)
+{
+	Region tmp;
+	switch (combineMode) {
+	case RGN_AND:
+		XIntersectRegion(src1->region, src2->region, dest->region);
+		break;
+	case RGN_COPY:
+		tmp = XCreateRegion();
+		XUnionRegion(src1->region, tmp, dest->region);
+		XDestroyRegion(tmp);
+		break;
+	case RGN_DIFF:
+		XSubtractRegion(src1->region, src2->region, dest->region);
+		break;
+	case RGN_OR:
+		XUnionRegion(src1->region, src2->region, dest->region);
+		break;
+	case RGN_XOR:
+		XXorRegion(src1->region, src2->region, dest->region);
+		break;
+	}
+	return region_get_complexity(dest);
+}
+
 BOOL
 SetRectRgn(HRGN hrgn, int left, int top, int right, int bottom)
 {
