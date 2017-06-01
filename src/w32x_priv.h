@@ -37,6 +37,9 @@ struct Wnd {
   int width;
   int height;
 
+  HRGN update;
+  BOOL erase;
+
   char *label;
   int isTopLevel;
   HDC hdc;

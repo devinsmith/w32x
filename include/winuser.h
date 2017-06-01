@@ -100,6 +100,8 @@ int GetSystemMetrics(int nIndex);
 LONG GetWindowLong(HWND hWnd, int nIndex);
 BOOL GetWindowRect(HWND wnd, LPRECT rect);
 
+BOOL InvalidateRect(HWND hWnd, const RECT *lpRect, BOOL bErase);
+
 int ReleaseDC(HWND hWnd, HDC hDC);
 BOOL SetMenu(HWND hwnd);
 BOOL UpdateWindow(HWND hwnd);

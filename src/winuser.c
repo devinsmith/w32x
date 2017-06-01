@@ -174,6 +174,25 @@ int GetSystemMetrics(int nIndex)
   return 0;
 }
 
+/*
+ * Get a region to be updated (in the client coordinates?)
+ */
+int
+GetUpdateRgn(HWND hwnd, HRGN rgn, BOOL erase)
+{
+	if (erase && hwnd->update != NULL &&
+	    NULLREGION != GetRgnBox(hwnd->update, NULL)) {
+		HDC hdc = GetDC(hwnd);
+		SendMessage(hwnd, WM_ERASEBKGND, (WPARAM)hdc, 0);
+		ReleaseDC(hwnd, hdc);
+	}
+	if (hwnd->update == NULL) {
+		SetRectRgn(rgn, 0, 0, 0, 0); /* XXX: Correct? */
+		return NULLREGION;
+	}
+	return CombineRgn(rgn, hwnd->update, NULL, RGN_COPY);
+}
+
 LONG GetWindowLong(HWND hWnd, int nIndex)
 {
   /* TODO: Not all indexes are handled. */
@@ -202,6 +221,55 @@ BOOL GetWindowRect(HWND wnd, LPRECT rect)
   rect->bottom = y_return + wnd->height;
 
   return TRUE;
+}
+
+BOOL
+InvalidateRect(HWND hwnd, const RECT *r, BOOL erase)
+{
+	if (hwnd == NULL) {
+		fprintf(stderr, "InvalidateRect(NULL, ...) - Not currently supported\n");
+		return TRUE;
+	}
+
+	hwnd->erase = erase;
+	/* A null rect value indicates that the entire client rect should be
+	 * invalidated. */
+	if (r == NULL) {
+		RECT client;
+		if (hwnd->update) {
+			DeleteObject(hwnd->update);
+		}
+		GetClientRect(hwnd, &client);
+		hwnd->update = CreateRectRgnIndirect(&client);
+		return TRUE;
+	}
+	RECT client;
+	RECT fixed = *r;
+	RECT fixed2;
+	HRGN fixedRgn;
+
+	if (fixed.left > fixed.right) {
+		fixed.left = r->right;
+		fixed.right = r->left;
+	}
+	if (fixed.top > fixed.bottom) {
+		fixed.top = r->bottom;
+		fixed.bottom = r->top;
+	}
+	GetClientRect(hwnd, &client);
+	if (!IntersectRect(&fixed2, &client, &fixed))
+		return TRUE;
+	fixedRgn = CreateRectRgnIndirect(&fixed2);
+	if (fixedRgn == NULL)
+		return FALSE;
+	if (hwnd->update == NULL) {
+		hwnd->update = fixedRgn;
+	} else {
+		CombineRgn(hwnd->update, hwnd->update,
+				 fixedRgn, RGN_OR);
+		DeleteObject(fixedRgn);
+	}
+	return TRUE;
 }
 
 int ReleaseDC(HWND hwnd, HDC hdc)

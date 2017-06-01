@@ -76,6 +76,8 @@
 
 HBRUSH CreateSolidBrush(COLORREF crColor);
 HBRUSH CreateBrushIndirect(const LOGBRUSH *lplb);
+HRGN CreateRectRgn(int left, int top, int right, int bottom);
+HRGN CreateRectRgnIndirect(const RECT *lprc);
 
 int CombineRgn(HRGN dest, HRGN src1, HRGN src2, int combineMode);
 int GetRgnBox(HRGN hrgn, RECT *lprc);

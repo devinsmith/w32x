@@ -84,6 +84,7 @@ typedef DWORD COLORREF;
 #define WM_PAINT                        0x000F
 #define WM_CLOSE                        0x0010
 #define WM_QUIT                         0x0012
+#define WM_ERASEBKGND                   0x0014
 #define WM_NCPAINT                      0x0085
 #define WM_LBUTTONDOWN                  0x0201
 #define WM_LBUTTONUP                    0x0202

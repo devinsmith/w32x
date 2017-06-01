@@ -134,6 +134,34 @@ HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor)
   return obj;
 }
 
+static void
+region_union_rect(HRGN rgn, int left, int top, int right, int bottom)
+{
+	XRectangle rect;
+	rect.x = left;
+	rect.y = top;
+	rect.width = right - left;
+	rect.height = bottom - top;
+	XUnionRectWithRegion(&rect, rgn->region, rgn->region);
+}
+
+HRGN
+CreateRectRgn(int left, int top, int right, int bottom)
+{
+	struct GDIOBJ *obj = calloc(1, sizeof(struct GDIOBJ));
+
+	obj->obj_sig = REGION_MAGIC;
+	obj->region = XCreateRegion();
+	region_union_rect(obj, left, top, right, bottom);
+	return obj;
+}
+
+HRGN
+CreateRectRgnIndirect(const RECT *r)
+{
+	return CreateRectRgn(r->left, r->top, r->right, r->bottom);
+}
+
 /* The DeleteObject function deletes a logical pen, brush, font, bitmap,
  * region, or palette, freeing all system resources associated with the object.
  * After the object is deleted, the specified handle is no longer valid.
@@ -144,6 +172,12 @@ BOOL DeleteObject(HGDIOBJ hObject)
 
   if (obj->selected)
     return FALSE;
+
+  if (obj->obj_sig == REGION_MAGIC) {
+    if (obj->region != NULL) {
+      XDestroyRegion(obj->region);
+    }
+  }
 
   free(hObject);
   return TRUE;
@@ -305,17 +339,6 @@ GetRgnBox(HRGN hrgn, RECT *r)
 		r->bottom = rect.y + rect.height;
 	}
 	return region_get_complexity(hrgn);
-}
-
-static void
-region_union_rect(HRGN rgn, int left, int top, int right, int bottom)
-{
-	XRectangle rect;
-	rect.x = left;
-	rect.y = top;
-	rect.width = right - left;
-	rect.height = bottom - top;
-	XUnionRectWithRegion(&rect, rgn->region, rgn->region);
 }
 
 int
