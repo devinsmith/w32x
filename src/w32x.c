@@ -200,6 +200,7 @@ void PostQuitMessage(int nExitCode)
 
 static void translate_xevent_to_msg(XEvent *e, LPMSG msg)
 {
+  RECT r;
   Wnd *win = NULL;
 
   XFindContext(e->xany.display, e->xany.window, ctxt, (XPointer *)&win);
@@ -232,11 +233,31 @@ static void translate_xevent_to_msg(XEvent *e, LPMSG msg)
     }
     break;
   case Expose:
+    /*
+     * set clip rectangle for client area.
+     */
+    r.left = e->xexpose.x - 0;
+    if (r.left < 0)
+      r.left = 0;
+    r.top = e->xexpose.y - 0;
+    if (r.top < 0)
+      r.top = 0;
+    r.right = e->xexpose.x + e->xexpose.width;
+    if (r.right < 0)
+      r.right = 0;
+    r.bottom = e->xexpose.y + e->xexpose.height;
+    if (r.bottom < 0)
+      r.bottom = 0;
+
+    InvalidateRect(msg->hwnd, &r, TRUE);
     if (e->xexpose.count == 0) {
+#if 0
       /* Don't bubble this up, instead put it in a queue */
       msg->message = WM_PAINT;
       msg->wParam = 0;
       msg->lParam = 0;
+#endif
+      UpdateWindow(msg->hwnd);
     }
     break;
   case ClientMessage:
