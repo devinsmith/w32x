@@ -183,4 +183,9 @@ BOOL CopyRect(RECT *dst, const RECT *src);
 BOOL UnionRect(RECT *dst, const RECT *r1, const RECT *r2);
 BOOL SubtractRect(RECT *dst, const RECT *r1, const RECT *r2);
 
+/* Menus */
+HMENU CreateMenu(void);
+BOOL IsMenu(HMENU menu);
+
+
 #endif /* __WINDOWS_H__ */

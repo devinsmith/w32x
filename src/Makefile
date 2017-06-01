@@ -2,7 +2,7 @@
 
 .PHONY: all clean
 
-SRCS = button.c defwnd.c graphics.c rect.c w32x.c winuser.c
+SRCS = button.c defwnd.c graphics.c menu.c rect.c w32x.c winuser.c
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
 
