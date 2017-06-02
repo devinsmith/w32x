@@ -83,16 +83,16 @@ main(int argc, char *argv[])
 
   /* parent window */
   top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1",
-      WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL);
+      WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL, menu);
   SetMenu(top, menu);
 
   CreateWindow("MenuBar", "Nothing", WS_CHILD, 0, 0, 500,
-      GetSystemMetrics(SM_CYMENU), top);
+      GetSystemMetrics(SM_CYMENU), top, NULL);
 
   CreateWindow("RadioButton", "Radio 1", WS_CHILD | WS_BORDER, 5, 30,
-      100, 25, top);
+      100, 25, top, NULL);
   CreateWindow("RadioButton", "Radio 2", WS_CHILD | WS_BORDER, 5, 60,
-      100, 25, top);
+      100, 25, top, NULL);
 
   ShowWindow(top);
   UpdateWindow(top);

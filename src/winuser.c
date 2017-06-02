@@ -66,16 +66,17 @@ HDC BeginPaint(HWND wnd, PAINTSTRUCT *lpPaint)
   return lpPaint->hdc;
 }
 
-HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
-  DWORD dwStyle, int x, int y, int width, int height, HWND parent)
+HWND
+CreateWindow(const char *lpClassName, const char *lpWindowName, DWORD dwStyle,
+    int x, int y, int width, int height, HWND parent, HMENU menu)
 {
   return CreateWindowEx(0, lpClassName, lpWindowName, dwStyle, x, y,
-      width, height, parent);
+      width, height, parent, menu);
 }
 
 HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   const char *lpWindowName, DWORD dwStyle, int x, int y, int width,
-  int height, HWND parent)
+  int height, HWND parent, HMENU menu)
 {
   XClassHint class_hint;
   Window parent_win;
@@ -104,6 +105,7 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   /* Save the styles */
   wnd->dwStyle = dwStyle;
   wnd->dwExStyle = dwExStyle;
+	wnd->menu = menu;
 
 //  w32x_get_parent_client_offset(parent, &x, &y);
 
