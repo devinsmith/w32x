@@ -103,7 +103,7 @@ BOOL GetWindowRect(HWND wnd, LPRECT rect);
 BOOL InvalidateRect(HWND hWnd, const RECT *lpRect, BOOL bErase);
 
 int ReleaseDC(HWND hWnd, HDC hDC);
-BOOL SetMenu(HWND hwnd);
+BOOL SetMenu(HWND hwnd, HMENU menu);
 BOOL UpdateWindow(HWND hwnd);
 
 #endif /* __WINUSER_H__ */

@@ -162,7 +162,7 @@ HDC GetDC(HWND hwnd)
 
 BOOL GetMenu(HWND hwnd)
 {
-  return hwnd->hasMenu;
+  return hwnd->menu != NULL;
 }
 
 int GetSystemMetrics(int nIndex)
@@ -278,11 +278,15 @@ int ReleaseDC(HWND hwnd, HDC hdc)
   return 0;
 }
 
-BOOL SetMenu(HWND hwnd)
+BOOL
+SetMenu(HWND hwnd, HMENU menu)
 {
-  hwnd->hasMenu = 1;
+	if (!IsMenu(menu)) {
+		return FALSE;
+	}
+	hwnd->menu = menu;
 
-  return TRUE;
+	return TRUE;
 }
 
 BOOL UpdateWindow(HWND hwnd)

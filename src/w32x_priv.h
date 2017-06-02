@@ -43,7 +43,7 @@ struct Wnd {
   char *label;
   int isTopLevel;
   HDC hdc;
-  int hasMenu;
+  HMENU menu;
   int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 
   char wndExtra[];

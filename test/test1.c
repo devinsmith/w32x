@@ -56,6 +56,7 @@ main(int argc, char *argv[])
   WNDCLASS mbClass;
   MSG msg;
   BOOL bRet;
+  HMENU menu;
 
   /* Open display */
   if (w32x_init(NULL) != 0) {
@@ -78,11 +79,12 @@ main(int argc, char *argv[])
   mbClass.EventProc = MenuBarProc;
   RegisterClass(&mbClass);
 
+  menu = CreateMenu();
 
   /* parent window */
   top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1",
       WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL);
-  SetMenu(top);
+  SetMenu(top, menu);
 
   CreateWindow("MenuBar", "Nothing", WS_CHILD, 0, 0, 500,
       GetSystemMetrics(SM_CYMENU), top);
