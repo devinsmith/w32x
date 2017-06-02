@@ -60,6 +60,7 @@ TAILQ_HEAD(paint_queue, paint_entry) g_paint_queue;
 static WndClass *class_list = NULL;
 
 extern WNDCLASS ButtonClass;
+extern WNDCLASS MenuClass;
 
 /* Special atom for deleted messages */
 Atom WM_DELETE_WINDOW;
@@ -88,6 +89,7 @@ int w32x_init(const char *display_name)
 
   /* Register built in classes. */
   RegisterClass(&ButtonClass);
+  RegisterClass(&MenuClass);
 
   return 0;
 }

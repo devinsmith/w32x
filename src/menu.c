@@ -25,6 +25,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
@@ -35,6 +36,26 @@ struct WndMenu {
 	int magic;
 	HWND menuwnd;
 };
+
+static int MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam,
+    LPARAM lParam);
+
+WNDCLASS MenuClass = {
+  "#32768", C_GRAY4, MenuWindowProc, 0
+};
+
+static int
+MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
+{
+  switch (msg) {
+  case WM_PAINT:
+    printf("Need to paint menubar\n");
+    break;
+  default:
+    break;
+  }
+  return DefWindowProc(wnd, msg, wParam, lParam);
+}
 
 BOOL
 IsMenu(HMENU menu)

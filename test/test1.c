@@ -35,25 +35,11 @@ MainWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
   return DefWindowProc(wnd, msg, wParam, lParam);
 }
 
-static int
-MenuBarProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
-{
-  switch (msg) {
-  case WM_PAINT:
-    printf("Need to paint menubar\n");
-    break;
-  default:
-    break;
-  }
-  return DefWindowProc(wnd, msg, wParam, lParam);
-}
-
 int
 main(int argc, char *argv[])
 {
   HWND top;
   WNDCLASS myClass;
-  WNDCLASS mbClass;
   MSG msg;
   BOOL bRet;
   HMENU menu;
@@ -68,25 +54,15 @@ main(int argc, char *argv[])
   myClass.BackgroundColor = C_GRAY2;
   myClass.wndExtra = 0;
   myClass.EventProc = MainWindowProc;
-
   RegisterClass(&myClass);
-
-  /* Setup menu bar class */
-  memset(&mbClass, 0, sizeof(WNDCLASS));
-  mbClass.Name = "MenuBar";
-  mbClass.BackgroundColor = C_GRAY4;
-  mbClass.wndExtra = 0;
-  mbClass.EventProc = MenuBarProc;
-  RegisterClass(&mbClass);
 
   menu = CreateMenu();
 
   /* parent window */
   top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1",
       WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL, menu);
-  SetMenu(top, menu);
 
-  CreateWindow("MenuBar", "Nothing", WS_CHILD, 0, 0, 500,
+  CreateWindow("#32768", "Nothing", WS_CHILD, 0, 0, 500,
       GetSystemMetrics(SM_CYMENU), top, NULL);
 
   CreateWindow("RadioButton", "Radio 1", WS_CHILD | WS_BORDER, 5, 30,
