@@ -28,6 +28,10 @@
 #ifndef __WINDOWS_H__
 #define __WINDOWS_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 #define C_RED    "rgb:ff/00/00"
@@ -196,5 +200,8 @@ BOOL SubtractRect(RECT *dst, const RECT *r1, const RECT *r2);
 HMENU CreateMenu(void);
 BOOL IsMenu(HMENU menu);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __WINDOWS_H__ */
