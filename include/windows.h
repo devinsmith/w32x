@@ -83,6 +83,7 @@ typedef DWORD COLORREF;
 /* Events */
 #define WM_CREATE                       0x0001
 #define WM_DESTROY                      0x0002
+#define WM_SIZE                         0x0005
 #define WM_PAINT                        0x000F
 #define WM_CLOSE                        0x0010
 #define WM_QUIT                         0x0012
