@@ -36,19 +36,14 @@ MainWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 }
 
 int
-main(int argc, char *argv[])
+WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
+    int nCmdShow)
 {
   HWND top;
   WNDCLASS myClass;
   MSG msg;
   BOOL bRet;
   HMENU menu;
-
-  /* Open display */
-  if (w32x_init(NULL) != 0) {
-    fprintf(stderr, "Cannot open display.\n");
-    exit(1);
-  }
 
   myClass.Name = "TopWindow";
   myClass.BackgroundColor = C_GRAY2;

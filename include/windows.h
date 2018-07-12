@@ -72,6 +72,8 @@ typedef long LONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef unsigned long ULONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef uintptr_t UINT_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 
+typedef char *LPTSTR;
+
 typedef UINT_PTR WPARAM;
 typedef LONG_PTR LPARAM;
 
@@ -90,6 +92,8 @@ typedef DWORD COLORREF;
 #define WM_LBUTTONUP                    0x0202
 
 /* Type declarations */
+typedef void *HINSTANCE;
+
 typedef struct WndClass WndClass;
 typedef struct WndDC *HDC;
 typedef struct Wnd *HWND;

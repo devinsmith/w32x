@@ -25,7 +25,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define _GNU_SOURCE
 #include <sys/queue.h>
+#include <link.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,7 +37,6 @@
 
 #include <windows.h>
 #include "w32x_priv.h"
-
 
 Colormap colormap;
 int blackpixel;
@@ -62,14 +63,35 @@ static WndClass *class_list = NULL;
 extern WNDCLASS ButtonClass;
 extern WNDCLASS MenuClass;
 
+extern int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+    LPTSTR pCmdLine, int nCmdShow);
+
 /* Special atom for deleted messages */
 Atom WM_DELETE_WINDOW;
 
-int w32x_init(const char *display_name)
+struct dl_phdr_info *module;
+
+static int
+callback(struct dl_phdr_info *info, size_t size, void *data)
 {
-	disp = XOpenDisplay(display_name);
-	if (disp == NULL)
-		return -1;
+	module = info;
+	return 0;
+}
+
+int
+main(int argc, char *argv[])
+{
+	int i;
+	size_t length = 0;
+	int result = 1;
+	const char *display = getenv("DISPLAY");
+	dl_iterate_phdr(callback, NULL);
+
+	if ((display == NULL) ||
+	    (disp = XOpenDisplay(display)) == NULL) {
+		fprintf(stderr, "Unable to open display.\n");
+		exit(1);
+	}
 
 	colormap = DefaultColormap(disp, DefaultScreen(disp));
 
@@ -77,11 +99,26 @@ int w32x_init(const char *display_name)
 	blackpixel = BlackPixel(disp, DefaultScreen(disp));
 	whitepixel = WhitePixel(disp, DefaultScreen(disp));
 
+	/* Initialize lpCmdLine. */
+	for (i=0; i < argc; i++) {
+		length += strlen(argv[i]);
+		length++; /* space or final '\0' character */
+	}
+
+	char *lpCmdLine = calloc(1, length);
+	length = 0;
+
+	for (i = 0; i < argc; i++) {
+		strcat(lpCmdLine + length, argv[i]);
+		length += strlen(argv[i]);
+		lpCmdLine[length++] = ' ';
+	}
+	lpCmdLine[length] = '\0';
+
 	/* Capture the WM_DELETE_WINDOW atom, if it exists. We'll use this later
 	 * to tell the window manager that we're interested in handling the
 	 * close/delete events for top level windows */
 	WM_DELETE_WINDOW = XInternAtom(disp, "WM_DELETE_WINDOW", 0);
-
 	ctxt = XUniqueContext();
 
 	TAILQ_INIT(&g_msg_queue);
@@ -91,7 +128,11 @@ int w32x_init(const char *display_name)
 	RegisterClass(&ButtonClass);
 	RegisterClass(&MenuClass);
 
-	return 0;
+	result = WinMain((HINSTANCE) module->dlpi_addr, (HINSTANCE) 0, lpCmdLine, 0);
+
+	free(lpCmdLine);
+
+	return result;
 }
 
 WndClass *get_class_by_name(const char *name)
