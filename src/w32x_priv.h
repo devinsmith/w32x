@@ -33,6 +33,7 @@ struct Wnd {
 	DWORD dwStyle;
 	DWORD dwExStyle;
 	HWND parent;
+	int magic;
 
 	int width;
 	int height;

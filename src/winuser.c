@@ -36,6 +36,8 @@
 #include <windows.h>
 #include "w32x_priv.h"
 
+#define HWND_MAGIC 0x48574e44 /* 'HWND' */
+
 extern Display *disp;
 extern XContext ctxt;
 extern Atom WM_DELETE_WINDOW;
@@ -96,6 +98,7 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
 		parent_win = DefaultRootWindow(disp);
 	}
 
+	wnd->magic = HWND_MAGIC;
 	wnd->width = width;
 	wnd->height = height;
 
@@ -153,6 +156,11 @@ BOOL GetClientRect(HWND wnd, LPRECT rect)
 	return TRUE;
 }
 
+BOOL
+IsWindow(HWND hwnd)
+{
+	return (hwnd == NULL) ? FALSE : hwnd->magic == HWND_MAGIC;
+}
 
 HDC GetDC(HWND hwnd)
 {

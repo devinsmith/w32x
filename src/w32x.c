@@ -361,6 +361,18 @@ BOOL GetMessage(LPMSG msg, HWND wnd)
 	return TRUE;
 }
 
+HWND GetParent(HWND wnd)
+{
+	HWND parent = 0;
+
+	if (IsWindow(wnd))
+	{
+		parent = wnd->parent;
+	}
+
+	return parent;
+}
+
 int DispatchMessage(const MSG *msg)
 {
 	Wnd *wnd = msg->hwnd;

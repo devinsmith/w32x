@@ -154,6 +154,8 @@ void ShowWindow(HWND wnd);
 void SetWindowName(HWND wnd, const char *name);
 int GetWindowText(HWND wnd, char *lpString, int nMaxCount);
 void DestroyWindow(HWND wnd);
+HWND GetParent(HWND wnd);
+BOOL IsWindow(HWND wnd);
 
 HGDIOBJ GetStockObject(int fnObject);
 HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor);
