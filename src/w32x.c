@@ -346,7 +346,7 @@ BOOL GetMessage(LPMSG msg, HWND wnd)
 
 		/* Anything in the paint queue? */
 		TAILQ_FOREACH(q_paint, &g_paint_queue, entries) {
-
+			printf("TODO: Handle Event.\n");
 		}
 	}
 
@@ -377,7 +377,7 @@ int DispatchMessage(const MSG *msg)
 {
 	Wnd *wnd = msg->hwnd;
 
-	wnd->proc(wnd, msg->message, 0, 0);
+	wnd->proc(wnd, msg->message, msg->wParam, msg->lParam);
 
 	return 0;
 }
