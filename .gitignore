@@ -53,3 +53,10 @@ dkms.conf
 
 # Tests
 test/test1
+
+include/config.h
+Makefile
+src/Makefile
+test/Makefile
+config.mak
+build
