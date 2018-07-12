@@ -32,79 +32,78 @@
 #define RB_X 8
 
 struct RadioButtonInfo {
-  int activated;
+	int activated;
 };
 
 static int RadioButtonProc(HWND wnd, unsigned int msg, WPARAM wParam,
     LPARAM lParam);
 
 WNDCLASS ButtonClass = {
-  "RadioButton", C_GRAY5, RadioButtonProc, sizeof(struct RadioButtonInfo)
+	"RadioButton", C_GRAY5, RadioButtonProc, sizeof(struct RadioButtonInfo)
 };
 
 static void
 drawRadioButton(HWND wnd, int x, int y, unsigned int w,
     unsigned int h, int clicked)
 {
-  PAINTSTRUCT ps;
-  struct RadioButtonInfo *extra;
-  char label[256];
+	PAINTSTRUCT ps;
+	struct RadioButtonInfo *extra;
+	char label[256];
 
-  GetWindowText(wnd, label, sizeof(label));
-  extra = GetWindowLongPtr(wnd, 0);
+	GetWindowText(wnd, label, sizeof(label));
+	extra = GetWindowLongPtr(wnd, 0);
 
-  HDC hdc = BeginPaint(wnd, &ps);
+	HDC hdc = BeginPaint(wnd, &ps);
 
-  SelectObject(hdc, GetStockObject(DC_BRUSH));
-  SelectObject(hdc, GetStockObject(BLACK_PEN));
+	SelectObject(hdc, GetStockObject(DC_BRUSH));
+	SelectObject(hdc, GetStockObject(BLACK_PEN));
 
-  if (clicked) {
-    extra->activated = extra->activated ? 0 : 1;
-    SetDCBrushColor(hdc, RGB(0x80, 0x80, 0x80));
-  } else {
-    SetDCBrushColor(hdc, RGB(0xe0, 0xe0, 0xe0));
-  }
+	if (clicked) {
+		extra->activated = extra->activated ? 0 : 1;
+		SetDCBrushColor(hdc, RGB(0x80, 0x80, 0x80));
+	} else {
+		SetDCBrushColor(hdc, RGB(0xe0, 0xe0, 0xe0));
+	}
 
-  Rectangle(hdc, 0, 0, w - 1, h - 1);
-  Rectangle(hdc, 1, 1, w - 2, h - 2);
+	Rectangle(hdc, 0, 0, w - 1, h - 1);
+	Rectangle(hdc, 1, 1, w - 2, h - 2);
 
-  if (extra->activated) {
-    SetDCBrushColor(hdc, RGB(0, 0xff, 0));
-  } else {
-    SetDCBrushColor(hdc, RGB(0xc0, 0xc0, 0xc0));
-  }
+	if (extra->activated) {
+		SetDCBrushColor(hdc, RGB(0, 0xff, 0));
+	} else {
+		SetDCBrushColor(hdc, RGB(0xc0, 0xc0, 0xc0));
+	}
 
-  Ellipse(hdc, RB_X, (h - RBDIAM) / 2, RB_X + RBDIAM,
-      ((h - RBDIAM) / 2) + RBDIAM);
+	Ellipse(hdc, RB_X, (h - RBDIAM) / 2, RB_X + RBDIAM,
+	    ((h - RBDIAM) / 2) + RBDIAM);
 
-  SelectObject(hdc, GetStockObject(SYSTEM_FONT));
-  TextOut(hdc, RB_X * 2 + RBDIAM, h, label, strlen(label));
-
+	SelectObject(hdc, GetStockObject(SYSTEM_FONT));
+	TextOut(hdc, RB_X * 2 + RBDIAM, h, label, strlen(label));
 }
 
 static int
 RadioButtonProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
-  RECT winRect;
+	RECT winRect;
 
-  GetClientRect(wnd, &winRect);
+	GetClientRect(wnd, &winRect);
 
-  switch (msg) {
-  case WM_LBUTTONDOWN:
-			drawRadioButton(wnd, winRect.left, winRect.top,
-			    winRect.right, winRect.bottom, 1);
+	switch (msg) {
+	case WM_LBUTTONDOWN:
+		drawRadioButton(wnd, winRect.left, winRect.top,
+		    winRect.right, winRect.bottom, 1);
 		break;
-  case WM_LBUTTONUP:
-			drawRadioButton(wnd, winRect.left, winRect.top,
-			    winRect.right, winRect.bottom, 0);
+	case WM_LBUTTONUP:
+		drawRadioButton(wnd, winRect.left, winRect.top,
+		    winRect.right, winRect.bottom, 0);
 		break;
-  case WM_PAINT:
-			drawRadioButton(wnd, winRect.left, winRect.top,
-			    winRect.right, winRect.bottom, 0);
+	case WM_PAINT:
+		drawRadioButton(wnd, winRect.left, winRect.top,
+		    winRect.right, winRect.bottom, 0);
 		break;
-  default:
-    return DefWindowProc(wnd, msg, wParam, lParam);
-    break;
-  }
-  return 1;
+	default:
+		return DefWindowProc(wnd, msg, wParam, lParam);
+		break;
+	}
+	return 1;
 }

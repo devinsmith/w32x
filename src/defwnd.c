@@ -30,55 +30,56 @@
 #include <string.h>
 #include <windows.h>
 
-static int handle_ncpaint(HWND hwnd)
+static int
+handle_ncpaint(HWND hwnd)
 {
-  RECT wr;
-  LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+	RECT wr;
+	LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
 
-  /* Not technically correct, becuse the X11 WM paints our NC area. */
-  GetClientRect(hwnd, &wr);
+	/* Not technically correct, becuse the X11 WM paints our NC area. */
+	GetClientRect(hwnd, &wr);
 
-  if ((exStyle & WS_EX_CLIENTEDGE)) {
-    int top = 0;
-    if (GetMenu(hwnd)) {
-      top += GetSystemMetrics(SM_CYMENU);
-    }
-    HDC hdc = GetDC(hwnd);
-    SelectObject(hdc, GetStockObject(DC_BRUSH));
-    SetDCBrushColor(hdc, RGB(0xd0, 0xd0, 0xd0));
-    Rectangle(hdc, 0, top, wr.right - 1, wr.bottom - 1);
-    SetDCBrushColor(hdc, RGB(0xc0, 0xc0, 0xc0));
-    Rectangle(hdc, 1, top + 1, wr.right - 2, wr.bottom - 2);
-    SetDCBrushColor(hdc, RGB(0x00, 0x00, 0x00));
-    Rectangle(hdc, 2, top + 2, wr.right - 3, wr.bottom - 3);
+	if ((exStyle & WS_EX_CLIENTEDGE)) {
+		int top = 0;
+		if (GetMenu(hwnd)) {
+			top += GetSystemMetrics(SM_CYMENU);
+		}
+		HDC hdc = GetDC(hwnd);
+		SelectObject(hdc, GetStockObject(DC_BRUSH));
+		SetDCBrushColor(hdc, RGB(0xd0, 0xd0, 0xd0));
+		Rectangle(hdc, 0, top, wr.right - 1, wr.bottom - 1);
+		SetDCBrushColor(hdc, RGB(0xc0, 0xc0, 0xc0));
+		Rectangle(hdc, 1, top + 1, wr.right - 2, wr.bottom - 2);
+		SetDCBrushColor(hdc, RGB(0x00, 0x00, 0x00));
+		Rectangle(hdc, 2, top + 2, wr.right - 3, wr.bottom - 3);
 
-    ReleaseDC(hwnd, hdc);
-  }
-  return 0;
+		ReleaseDC(hwnd, hdc);
+	}
+	return 0;
 }
 
 int
 DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
-  PAINTSTRUCT ps;
+	PAINTSTRUCT ps;
 
-  switch (msg) {
-  case WM_NCPAINT:
-    handle_ncpaint(wnd);
-    break;
-  case WM_PAINT:
-    BeginPaint(wnd, &ps);
-    break;
-  case WM_CLOSE:
-    printf("Request to close window\n");
-    DestroyWindow(wnd);
-    break;
-  case WM_DESTROY:
-    PostQuitMessage(0);
-    break;
-  default:
-    printf("DefWindowProc: %d\n", msg);
-    break;
-  }
-  return 0;
+	switch (msg) {
+	case WM_NCPAINT:
+		handle_ncpaint(wnd);
+		break;
+	case WM_PAINT:
+		BeginPaint(wnd, &ps);
+		break;
+	case WM_CLOSE:
+		printf("Request to close window\n");
+		DestroyWindow(wnd);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		printf("DefWindowProc: %d\n", msg);
+		break;
+	}
+	return 0;
 }

@@ -29,45 +29,45 @@
 #define __W32X_PRIV_H__
 
 struct Wnd {
-  Window window;
-  DWORD dwStyle;
-  DWORD dwExStyle;
-  HWND parent;
+	Window window;
+	DWORD dwStyle;
+	DWORD dwExStyle;
+	HWND parent;
 
-  int width;
-  int height;
+	int width;
+	int height;
 
-  HRGN update;
-  BOOL erase;
+	HRGN update;
+	BOOL erase;
 
-  char *label;
-  int isTopLevel;
-  HDC hdc;
-  HMENU menu;
-  int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+	char *label;
+	int isTopLevel;
+	HDC hdc;
+	HMENU menu;
+	int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 
-  char wndExtra[];
+	char wndExtra[];
 };
 typedef struct Wnd Wnd;
 
 struct WndClass {
-  struct WndClass *next;
-  char *name;
-  unsigned long border_pixel;
-  unsigned long background_pixel;
-  int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
-  size_t wndExtra;
+	struct WndClass *next;
+	char *name;
+	unsigned long border_pixel;
+	unsigned long background_pixel;
+	int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+	size_t wndExtra;
 };
 
 struct WndDC {
-  HWND wnd;
+	HWND wnd;
 
-  int fgPixel;
-  int bgPixel;
-  GC gc;
-  struct GDIOBJ *selectedPen;
-  struct GDIOBJ *selectedBrush;
-  struct GDIOBJ *selectedFont;
+	int fgPixel;
+	int bgPixel;
+	GC gc;
+	struct GDIOBJ *selectedPen;
+	struct GDIOBJ *selectedBrush;
+	struct GDIOBJ *selectedFont;
 };
 
 HDC w32x_CreateDC(void);

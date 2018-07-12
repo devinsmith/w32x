@@ -41,20 +41,20 @@ static int MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam,
     LPARAM lParam);
 
 WNDCLASS MenuClass = {
-  "#32768", C_GRAY4, MenuWindowProc, 0
+	"#32768", C_GRAY4, MenuWindowProc, 0
 };
 
 static int
 MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
-  switch (msg) {
-  case WM_PAINT:
-    printf("Need to paint menubar\n");
-    break;
-  default:
-    break;
-  }
-  return DefWindowProc(wnd, msg, wParam, lParam);
+	switch (msg) {
+	case WM_PAINT:
+		printf("Need to paint menubar\n");
+		break;
+	default:
+		break;
+	}
+	return DefWindowProc(wnd, msg, wParam, lParam);
 }
 
 BOOL

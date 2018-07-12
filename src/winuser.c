@@ -43,137 +43,136 @@ extern Atom WM_DELETE_WINDOW;
 /* internals */
 static void w32x_get_parent_client_offset(HWND parent, int *x, int *y)
 {
-  if (parent == NULL)
-    return;
+	if (parent == NULL)
+		return;
 
-  if ((parent->dwExStyle & WS_EX_CLIENTEDGE)) {
-    *x += 3;
-    *y += 3;
-  }
+	if ((parent->dwExStyle & WS_EX_CLIENTEDGE)) {
+		*x += 3;
+		*y += 3;
+	}
 
-  if (GetMenu(parent)) {
-    *y += GetSystemMetrics(SM_CYMENU);
-  }
+	if (GetMenu(parent)) {
+		*y += GetSystemMetrics(SM_CYMENU);
+	}
 }
 
 HDC BeginPaint(HWND wnd, PAINTSTRUCT *lpPaint)
 {
-  lpPaint->hdc = GetDC(wnd);
-  lpPaint->fErase = FALSE;
+	lpPaint->hdc = GetDC(wnd);
+	lpPaint->fErase = FALSE;
 
-  SendMessage(wnd, WM_NCPAINT, 0, 0);
+	SendMessage(wnd, WM_NCPAINT, 0, 0);
 
-  return lpPaint->hdc;
+	return lpPaint->hdc;
 }
 
 HWND
 CreateWindow(const char *lpClassName, const char *lpWindowName, DWORD dwStyle,
     int x, int y, int width, int height, HWND parent, HMENU menu)
 {
-  return CreateWindowEx(0, lpClassName, lpWindowName, dwStyle, x, y,
-      width, height, parent, menu);
+	return CreateWindowEx(0, lpClassName, lpWindowName, dwStyle, x, y,
+	    width, height, parent, menu);
 }
 
 HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   const char *lpWindowName, DWORD dwStyle, int x, int y, int width,
   int height, HWND parent, HMENU menu)
 {
-  XClassHint class_hint;
-  Window parent_win;
-  Wnd *wnd;
-  WndClass *wc = get_class_by_name(lpClassName);
+	XClassHint class_hint;
+	Window parent_win;
+	Wnd *wnd;
+	WndClass *wc = get_class_by_name(lpClassName);
 
-  if (wc == NULL) {
-    /* Can't create window, no class */
-    return NULL;
-  }
+	if (wc == NULL) {
+		/* Can't create window, no class */
+		return NULL;
+	}
 
-  wnd = calloc(1, sizeof(Wnd) + wc->wndExtra);
+	wnd = calloc(1, sizeof(Wnd) + wc->wndExtra);
 
-  if (parent != NULL) {
-    parent_win = parent->window;
-  } else {
-    parent_win = DefaultRootWindow(disp);
-  }
+	if (parent != NULL) {
+		parent_win = parent->window;
+	} else {
+		parent_win = DefaultRootWindow(disp);
+	}
 
-  wnd->width = width;
-  wnd->height = height;
+	wnd->width = width;
+	wnd->height = height;
 
-  /* Create our GC */
-  wnd->hdc = w32x_CreateDC();
+	/* Create our GC */
+	wnd->hdc = w32x_CreateDC();
 
-  /* Save the styles */
-  wnd->dwStyle = dwStyle;
-  wnd->dwExStyle = dwExStyle;
+	/* Save the styles */
+	wnd->dwStyle = dwStyle;
+	wnd->dwExStyle = dwExStyle;
 	wnd->menu = menu;
 
-//  w32x_get_parent_client_offset(parent, &x, &y);
+	//  w32x_get_parent_client_offset(parent, &x, &y);
 
-  /* parent window */
-  wnd->window = XCreateSimpleWindow(disp, parent_win,
-    x, y, width, height,
-    dwStyle & WS_BORDER ? 1 : 0,
-    wc->border_pixel, wc->background_pixel);
-  wnd->label = strdup(lpWindowName);
-  wnd->proc = wc->proc;
-  wnd->parent = parent;
-  class_hint.res_name = wnd->label;
-  class_hint.res_class = wc->name;
-  XSetClassHint(disp, wnd->window, &class_hint);
+	/* parent window */
+	wnd->window = XCreateSimpleWindow(disp, parent_win,
+	    x, y, width, height, dwStyle & WS_BORDER ? 1 : 0,
+	    wc->border_pixel, wc->background_pixel);
+	wnd->label = strdup(lpWindowName);
+	wnd->proc = wc->proc;
+	wnd->parent = parent;
+	class_hint.res_name = wnd->label;
+	class_hint.res_class = wc->name;
+	XSetClassHint(disp, wnd->window, &class_hint);
 
-  XSaveContext(disp, wnd->window, ctxt, (XPointer)wnd);
+	XSaveContext(disp, wnd->window, ctxt, (XPointer)wnd);
 
-  XSelectInput(disp, wnd->window,
-    ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask |
-    StructureNotifyMask);
+	XSelectInput(disp, wnd->window,
+	    ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask |
+	    StructureNotifyMask);
 
-  /* Parent will explicitly call ShowWindow when ready */
-  if (parent != NULL)
-    ShowWindow(wnd);
+	/* Parent will explicitly call ShowWindow when ready */
+	if (parent != NULL)
+		ShowWindow(wnd);
 
-  /* For top level windows we want to do some extra special case
-   * processing */
-  if (parent == NULL) {
-    SetWindowName(wnd, lpWindowName);
+	/* For top level windows we want to do some extra special case
+	 * processing */
+	if (parent == NULL) {
+		SetWindowName(wnd, lpWindowName);
 
-    /* Use the WM_DELETE_WINDOW atom to tell the window manager that we want
-     * to handle when this window is closed/destroyed */
-    XSetWMProtocols(disp, wnd->window, &WM_DELETE_WINDOW, 1);
-  }
+		/* Use the WM_DELETE_WINDOW atom to tell the window manager that we want
+		 * to handle when this window is closed/destroyed */
+		XSetWMProtocols(disp, wnd->window, &WM_DELETE_WINDOW, 1);
+	}
 
-  return wnd;
+	return wnd;
 }
 
 BOOL GetClientRect(HWND wnd, LPRECT rect)
 {
-  rect->left = 0;
-  rect->top = 0;
-  rect->right = wnd->width;
-  rect->bottom = wnd->height;
+	rect->left = 0;
+	rect->top = 0;
+	rect->right = wnd->width;
+	rect->bottom = wnd->height;
 
-  return TRUE;
+	return TRUE;
 }
 
 
 HDC GetDC(HWND hwnd)
 {
-  /* For now, just return the private windows DC */
-  hwnd->hdc->wnd = hwnd;
-  return hwnd->hdc;
+	/* For now, just return the private windows DC */
+	hwnd->hdc->wnd = hwnd;
+	return hwnd->hdc;
 }
 
 BOOL GetMenu(HWND hwnd)
 {
-  return hwnd->menu != NULL;
+	return hwnd->menu != NULL;
 }
 
 int GetSystemMetrics(int nIndex)
 {
-  switch (nIndex) {
-  case SM_CYMENU:
-    return 19;
-  }
-  return 0;
+	switch (nIndex) {
+	case SM_CYMENU:
+		return 19;
+	}
+	return 0;
 }
 
 /*
@@ -197,32 +196,32 @@ GetUpdateRgn(HWND hwnd, HRGN rgn, BOOL erase)
 
 LONG GetWindowLong(HWND hWnd, int nIndex)
 {
-  /* TODO: Not all indexes are handled. */
-  if (hWnd == NULL)
-    return 0;
+	/* TODO: Not all indexes are handled. */
+	if (hWnd == NULL)
+		return 0;
 
-  if (nIndex == GWL_EXSTYLE)
-    return hWnd->dwExStyle;
-  else if (nIndex == GWL_STYLE)
-    return hWnd->dwStyle;
-  else
-    return 0;
+	if (nIndex == GWL_EXSTYLE)
+		return hWnd->dwExStyle;
+	else if (nIndex == GWL_STYLE)
+		return hWnd->dwStyle;
+	else
+		return 0;
 }
 
 BOOL GetWindowRect(HWND wnd, LPRECT rect)
 {
-  Window child;
-  int x_return, y_return;
+	Window child;
+	int x_return, y_return;
 
-  XTranslateCoordinates(disp, wnd->window, DefaultRootWindow(disp),
-      0, 0, &x_return, &y_return, &child);
+	XTranslateCoordinates(disp, wnd->window, DefaultRootWindow(disp),
+	    0, 0, &x_return, &y_return, &child);
 
-  rect->left = x_return;
-  rect->top = y_return;
-  rect->right = x_return + wnd->width;
-  rect->bottom = y_return + wnd->height;
+	rect->left = x_return;
+	rect->top = y_return;
+	rect->right = x_return + wnd->width;
+	rect->bottom = y_return + wnd->height;
 
-  return TRUE;
+	return TRUE;
 }
 
 BOOL
@@ -276,8 +275,8 @@ InvalidateRect(HWND hwnd, const RECT *r, BOOL erase)
 
 int ReleaseDC(HWND hwnd, HDC hdc)
 {
-  /* This is currently a no-op until we have other types of DCs */
-  return 0;
+	/* This is currently a no-op until we have other types of DCs */
+	return 0;
 }
 
 BOOL
@@ -293,7 +292,7 @@ SetMenu(HWND hwnd, HMENU menu)
 
 BOOL UpdateWindow(HWND hwnd)
 {
-  SendMessage(hwnd, WM_PAINT, 0, 0);
+	SendMessage(hwnd, WM_PAINT, 0, 0);
 
-  return TRUE;
+	return TRUE;
 }
