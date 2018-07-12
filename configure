@@ -331,6 +331,8 @@ include config.mak
 
 all:
 	@(cd src && $(MAKE))
+
+test:
 	@(cd test && $(MAKE))
 
 clean:

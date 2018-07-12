@@ -1,6 +1,8 @@
 # w32x
 A Win32 inspired API/wrapper over Xlib/X11 for Linux and Unix machines.
 
+[![Build Status](https://travis-ci.com/devinsmith/w32x.svg?branch=master)](https://travis-ci.com/devinsmith/w32x)
+
 # Requirements
 Debian based systems require the following libraries:
 ```
