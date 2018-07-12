@@ -99,11 +99,12 @@ typedef struct WndClass WndClass;
 typedef struct WndDC *HDC;
 typedef struct Wnd *HWND;
 typedef struct WndMenu *HMENU;
+typedef int (*WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 
 typedef struct tagWNDCLASS {
   const char *Name;
   const char *BackgroundColor;
-  int (*EventProc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+  WNDPROC EventProc;
   size_t wndExtra;
 } WNDCLASS;
 

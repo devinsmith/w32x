@@ -220,10 +220,10 @@ GetWindowText(HWND wnd, char *lpString, int nMaxCount)
 int
 SendMessage(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
-	if (wnd == NULL || wnd->proc == NULL)
-		return 0;
+	WNDPROC proc = (wnd == NULL || wnd->proc == NULL)
+	    ? DefWindowProc : wnd->proc;
 
-	return wnd->proc(wnd, msg, wParam, lParam);
+	return proc(wnd, msg, wParam, lParam);
 }
 
 void *GetWindowLongPtr(HWND wnd, int nIndex)
