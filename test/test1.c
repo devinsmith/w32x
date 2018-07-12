@@ -32,45 +32,45 @@
 static int
 MainWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
-  return DefWindowProc(wnd, msg, wParam, lParam);
+	return DefWindowProc(wnd, msg, wParam, lParam);
 }
 
 int
 WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
     int nCmdShow)
 {
-  HWND top;
-  WNDCLASS myClass;
-  MSG msg;
-  BOOL bRet;
-  HMENU menu;
+	HWND top;
+	WNDCLASS myClass;
+	MSG msg;
+	BOOL bRet;
+	HMENU menu;
 
-  myClass.Name = "TopWindow";
-  myClass.BackgroundColor = C_GRAY2;
-  myClass.wndExtra = 0;
-  myClass.EventProc = MainWindowProc;
-  RegisterClass(&myClass);
+	myClass.Name = "TopWindow";
+	myClass.BackgroundColor = C_GRAY2;
+	myClass.wndExtra = 0;
+	myClass.EventProc = MainWindowProc;
+	RegisterClass(&myClass);
 
-  menu = CreateMenu();
+	menu = CreateMenu();
 
-  /* parent window */
-  top = CreateWindowEx(WS_EX_CLIENTEDGE, "TopWindow", "Test1",
-      WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL, menu);
+	/* parent window */
+	top = CreateWindowEx(0, "TopWindow", "Test1",
+	    WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL, menu);
 
-  CreateWindow("#32768", "Nothing", WS_CHILD, 0, 0, 500,
-      GetSystemMetrics(SM_CYMENU), top, NULL);
+	CreateWindow("#32768", "Nothing", WS_CHILD, 0, 0, 500,
+	    GetSystemMetrics(SM_CYMENU), top, NULL);
 
-  CreateWindow("RadioButton", "Radio 1", WS_CHILD | WS_BORDER, 5, 30,
-      100, 25, top, NULL);
-  CreateWindow("RadioButton", "Radio 2", WS_CHILD | WS_BORDER, 5, 60,
-      100, 25, top, NULL);
+	CreateWindow("RadioButton", "Radio 1", WS_CHILD | WS_BORDER, 5, 30,
+	    100, 25, top, NULL);
+	CreateWindow("RadioButton", "Radio 2", WS_CHILD | WS_BORDER, 5, 60,
+	    100, 25, top, NULL);
 
-  ShowWindow(top);
-  UpdateWindow(top);
+	ShowWindow(top);
+	UpdateWindow(top);
 
-  while ((bRet = GetMessage(&msg, NULL)) != 0) {
-    DispatchMessage(&msg);
-  }
+	while ((bRet = GetMessage(&msg, NULL)) != 0) {
+		DispatchMessage(&msg);
+	}
 
-  return 0;
+	return 0;
 }
