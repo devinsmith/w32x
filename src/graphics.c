@@ -241,6 +241,7 @@ HGDIOBJ SelectObject(HDC hdc, HGDIOBJ hgdiobj)
 		break;
 	default:
 		printf("Unknown GDI object type\n");
+		break;
 	}
 
 	return old;
@@ -298,6 +299,18 @@ BOOL Rectangle(HDC hdc, int nLeftRect, int nTopRect,
 
 	return TRUE;
 }
+
+BOOL FillRect(HDC hdc, const RECT *lprc, HBRUSH hbr)
+{
+	setFgColor(hdc, hdc->selectedBrush->crColor);
+
+	int result = XFillRectangle(disp, hdc->wnd->window, hdc->gc, lprc->left,
+	    lprc->top, (lprc->right - lprc->left), (lprc->bottom - lprc->top));
+
+	printf("%d\n", result);
+	return TRUE;
+}
+
 
 static void
 region_get_clip_box(HRGN hrgn, XRectangle* rect)

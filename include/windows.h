@@ -167,6 +167,7 @@ BOOL Ellipse(HDC hdc, int nLeftRect, int nTopRect, int nRightRect,
     int nBottomRect);
 BOOL Rectangle(HDC hdc, int nLeftRect, int nTopRect,
   int nRightRect, int nBottomRect);
+BOOL FillRect(HDC hdc, const RECT *lprc, HBRUSH hbr);
 
 void *GetWindowLongPtr(HWND wnd, int nIndex);
 int SendMessage(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
