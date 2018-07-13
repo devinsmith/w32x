@@ -70,15 +70,16 @@ HDC BeginPaint(HWND wnd, PAINTSTRUCT *lpPaint)
 
 HWND
 CreateWindow(const char *lpClassName, const char *lpWindowName, DWORD dwStyle,
-    int x, int y, int width, int height, HWND parent, HMENU menu)
+    int x, int y, int width, int height, HWND parent, HMENU menu,
+    HINSTANCE hInst, LPVOID *extra)
 {
 	return CreateWindowEx(0, lpClassName, lpWindowName, dwStyle, x, y,
-	    width, height, parent, menu);
+	    width, height, parent, menu, hInst, extra);
 }
 
 HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
   const char *lpWindowName, DWORD dwStyle, int x, int y, int width,
-  int height, HWND parent, HMENU menu)
+  int height, HWND parent, HMENU menu, HINSTANCE hInst, LPVOID *extra)
 {
 	XClassHint class_hint;
 	Window parent_win;

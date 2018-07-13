@@ -88,11 +88,11 @@ typedef struct tagPAINTSTRUCT {
 HDC BeginPaint(HWND wnd, PAINTSTRUCT *lpPaint);
 HWND CreateWindow(const char *lpClassName, const char *lpWindowName,
     DWORD dwStyle, int x, int y, int width, int height, HWND parent,
-    HMENU menu);
+    HMENU menu, HINSTANCE hInst, LPVOID *extra);
 
 HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
     const char *lpWindowName, DWORD dwStyle, int x, int y, int nWidth,
-    int nHeight, HWND hWndParent, HMENU menu);
+    int nHeight, HWND hWndParent, HMENU menu, HINSTANCE hInst, LPVOID *extra);
 
 BOOL GetClientRect(HWND wnd, LPRECT rect);
 HDC GetDC(HWND hwnd);

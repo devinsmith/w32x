@@ -55,21 +55,23 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
 
 	/* parent window */
 	top = CreateWindowEx(0, "TopWindow", "Test1",
-	    WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL, menu);
+	    WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL, menu, hInstance, NULL);
 
 	/* XXX: Needs to be moved to menu.c */
 	CreateWindow("#32768", "Nothing", WS_CHILD | WS_VISIBLE, 0, 0, 500,
-	    GetSystemMetrics(SM_CYMENU), top, NULL);
+	    GetSystemMetrics(SM_CYMENU), top, NULL, hInstance, NULL);
 
 	CreateWindow("RadioButton", "Radio 1",
-	    WS_CHILD | WS_BORDER | WS_VISIBLE, 5, 30, 100, 25, top, NULL);
+	    WS_CHILD | WS_BORDER | WS_VISIBLE, 5, 30, 100, 25, top, NULL,
+	    hInstance, NULL);
 	CreateWindow("RadioButton", "Radio 2",
-	    WS_CHILD | WS_BORDER | WS_VISIBLE, 5, 60, 100, 25, top, NULL);
+	    WS_CHILD | WS_BORDER | WS_VISIBLE, 5, 60, 100, 25, top, NULL,
+	    hInstance, NULL);
 
 	ShowWindow(top, nCmdShow);
 	UpdateWindow(top);
 
-	while ((bRet = GetMessage(&msg, NULL)) != 0) {
+	while ((bRet = GetMessage(&msg, NULL, 0, 0)) != 0) {
 		DispatchMessage(&msg);
 	}
 

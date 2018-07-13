@@ -212,7 +212,7 @@ void *GetWindowLongPtr(HWND wnd, int nIndex);
 int SendMessage(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 int DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 
-BOOL GetMessage(LPMSG msg, HWND wnd);
+BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax);
 int DispatchMessage(const MSG *msg);
 void PostQuitMessage(int nExitCode);
 

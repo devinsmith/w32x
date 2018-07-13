@@ -344,7 +344,7 @@ static void translate_xevent_to_msg(XEvent *e, LPMSG msg)
 	}
 }
 
-BOOL GetMessage(LPMSG msg, HWND wnd)
+BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
 {
 	struct msgq_entry *q_msg;
 	struct paint_entry *q_paint;
