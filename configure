@@ -325,6 +325,7 @@ printf "\n#endif /* __CONFIG_H__ */\n" >> include/config.h
 echo "Creating Makefile"
 echo '# w32x master makefile
 
+.PHONY: test
 PREFIX = /usr/local
 
 include config.mak
