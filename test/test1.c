@@ -46,9 +46,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
 	HMENU menu;
 
 	myClass.Name = "TopWindow";
-	myClass.BackgroundColor = C_GRAY2;
+	myClass.hbrBackground = (HBRUSH)(COLOR_BTNSHADOW + 1);
 	myClass.wndExtra = 0;
-	myClass.EventProc = MainWindowProc;
+	myClass.lpfnWndProc = MainWindowProc;
 	RegisterClass(&myClass);
 
 	menu = CreateMenu();

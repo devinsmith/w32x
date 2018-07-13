@@ -34,18 +34,44 @@ extern "C" {
 
 #include <stdint.h>
 
-#define C_RED    "rgb:ff/00/00"
-#define C_GREEN  "rgb:00/ff/00"
-#define C_GREEN2 "rgb:00/ee/00"
-#define C_BLUE   "rgb:00/00/ff"
-#define C_GRAY1  "rgb:40/40/40"
-#define C_GRAY2  "rgb:80/80/80"
-#define C_GRAY3  "rgb:c0/c0/c0"
-#define C_GRAY4  "rgb:d0/d0/d0"
-#define C_GRAY5  "rgb:e0/e0/e0"
-#define C_GRAY6  "rgb:a0/a0/a0"
+#define COLOR_SCROLLBAR 0
+#define COLOR_BACKGROUND 1
+#define COLOR_ACTIVECAPTION 2
+#define COLOR_INACTIVECAPTION 3
+#define COLOR_MENU 4
+#define COLOR_WINDOW 5
+#define COLOR_WINDOWFRAME 6
+#define COLOR_MENUTEXT 7
+#define COLOR_WINDOWTEXT 8
+#define COLOR_CAPTIONTEXT 9
+#define COLOR_ACTIVEBORDER 10
+#define COLOR_INACTIVEBORDER 11
+#define COLOR_APPWORKSPACE 12
+#define COLOR_HIGHLIGHT 13
+#define COLOR_HIGHLIGHTTEXT 14
+#define COLOR_BTNFACE 15
+#define COLOR_BTNSHADOW 16
+#define COLOR_GRAYTEXT 17
+#define COLOR_BTNTEXT 18
+#define COLOR_INACTIVECAPTIONTEXT 19
+#define COLOR_BTNHIGHLIGHT 20
 
-#define C_BLACK  "rgb:00/00/00"
+#define COLOR_3DDKSHADOW 21
+#define COLOR_3DLIGHT 22
+#define COLOR_INFOTEXT 23
+#define COLOR_INFOBK 24
+#define COLOR_HOTLIGHT 26
+#define COLOR_GRADIENTACTIVECAPTION 27
+#define COLOR_GRADIENTINACTIVECAPTION 28
+#define COLOR_MENUHILIGHT 29
+#define COLOR_MENUBAR 30
+
+#define COLOR_DESKTOP COLOR_BACKGROUND
+#define COLOR_3DFACE COLOR_BTNFACE
+#define COLOR_3DSHADOW COLOR_BTNSHADOW
+#define COLOR_3DHIGHLIGHT COLOR_BTNHIGHLIGHT
+#define COLOR_3DHILIGHT COLOR_BTNHIGHLIGHT
+#define COLOR_BTNHILIGHT COLOR_BTNHIGHLIGHT
 
 /* TRUE/FALSE */
 #define FALSE   0
@@ -75,6 +101,8 @@ typedef unsigned int UINT;
 typedef long LONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef unsigned long ULONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef uintptr_t UINT_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
+typedef ULONG_PTR DWORD_PTR;
+typedef ULONG_PTR *PDWORD_PTR; // 32 bit on 32 bit, 64 bit on 64.
 
 typedef char *LPTSTR;
 typedef void *LPVOID;
@@ -107,19 +135,20 @@ typedef struct Wnd *HWND;
 typedef struct WndMenu *HMENU;
 typedef int (*WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 
-typedef struct tagWNDCLASS {
-  const char *Name;
-  const char *BackgroundColor;
-  WNDPROC EventProc;
-  size_t wndExtra;
-} WNDCLASS;
-
 /* GDI objects */
 typedef struct GDIOBJ *HGDIOBJ;
 typedef struct GDIOBJ *HFONT;
 typedef struct GDIOBJ *HBRUSH;
 typedef struct GDIOBJ *HPEN;
 typedef struct GDIOBJ *HRGN;
+
+typedef struct tagWNDCLASS {
+  const char *Name;
+  HBRUSH hbrBackground;
+  WNDPROC lpfnWndProc;
+  size_t wndExtra;
+} WNDCLASS;
+
 
 typedef struct tagLOGBRUSH {
   UINT      lbStyle;
@@ -164,6 +193,7 @@ HWND GetParent(HWND wnd);
 BOOL IsWindow(HWND wnd);
 
 HGDIOBJ GetStockObject(int fnObject);
+DWORD GetSysColor(int nIndex);
 HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor);
 
 BOOL DeleteObject(HGDIOBJ hObject);

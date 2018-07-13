@@ -100,6 +100,22 @@ HGDIOBJ GetStockObject(int fnObject)
 	return NULL;
 }
 
+DWORD
+GetSysColor(int nIndex)
+{
+	switch (nIndex) {
+	case COLOR_BTNFACE:
+		return RGB(0xe0, 0xe0, 0xe0);
+		break;
+	case COLOR_MENUBAR:
+		return RGB(0xd0, 0xd0, 0xd0);
+		break;
+	default:
+		break;
+	}
+	return RGB(0x80, 0x80, 0x80);
+}
+
 int GetObject(HANDLE h, int c, LPVOID pv)
 {
 	struct GDIOBJ *obj = h;

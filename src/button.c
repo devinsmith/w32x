@@ -39,7 +39,10 @@ static int RadioButtonProc(HWND wnd, unsigned int msg, WPARAM wParam,
     LPARAM lParam);
 
 WNDCLASS ButtonClass = {
-	"RadioButton", C_GRAY5, RadioButtonProc, sizeof(struct RadioButtonInfo)
+	"RadioButton",
+  (HBRUSH)(COLOR_BTNFACE + 1),
+  RadioButtonProc,
+  sizeof(struct RadioButtonInfo)
 };
 
 static void

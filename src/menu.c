@@ -41,7 +41,7 @@ static int MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam,
     LPARAM lParam);
 
 WNDCLASS MenuClass = {
-	"#32768", C_GRAY4, MenuWindowProc, 0
+	"#32768", (HBRUSH)(COLOR_MENUBAR + 1), MenuWindowProc, 0
 };
 
 static int

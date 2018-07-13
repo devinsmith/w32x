@@ -155,6 +155,8 @@ RegisterClass(WNDCLASS *wndClass)
 {
 	WndClass *wc;
 	XColor back_col;
+	char rgb_template[13];
+	COLORREF cr;
 
 	if (wndClass == NULL)
 		return -1;
@@ -165,8 +167,20 @@ RegisterClass(WNDCLASS *wndClass)
 		return 1;
 	}
 
+	if (wndClass->hbrBackground >= (HBRUSH)(COLOR_SCROLLBAR + 1) &&
+	    wndClass->hbrBackground <= (HBRUSH)(COLOR_MENUBAR + 1)) {
+		cr = GetSysColor(((long)wndClass->hbrBackground) - 1);
+	} else {
+		LOGBRUSH lb;
+
+		GetObject(wndClass->hbrBackground, sizeof(LOGBRUSH), &lb);
+		cr = lb.lbColor;
+	}
+
+	snprintf(rgb_template, sizeof(rgb_template), "rgb:%02x/%02x/%02x",
+	    (cr & 0xff), ((cr & 0xffff) >> 8) & 0xff, (cr >> 16) & 0xff);
 	/* Lookup colors */
-	XParseColor(disp, colormap, wndClass->BackgroundColor, &back_col);
+	XParseColor(disp, colormap, rgb_template, &back_col);
 	XAllocColor(disp, colormap, &back_col);
 
 	/* Register a new class */
@@ -175,7 +189,7 @@ RegisterClass(WNDCLASS *wndClass)
 	wc->border_pixel = blackpixel;
 	wc->background_pixel = back_col.pixel;
 	wc->wndExtra = wndClass->wndExtra;
-	wc->proc = wndClass->EventProc;
+	wc->proc = wndClass->lpfnWndProc;
 	wc->next = class_list;
 	class_list = wc;
 
