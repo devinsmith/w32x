@@ -29,7 +29,7 @@
 
 #include <windows.h>
 
-static int
+static LRESULT CALLBACK
 MainWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(wnd, msg, wParam, lParam);
@@ -44,6 +44,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
 	MSG msg;
 	BOOL bRet;
 	HMENU menu;
+
+	memset(&myClass, 0, sizeof(WNDCLASS));
 
 	myClass.lpszClassName = "TopWindow";
 	myClass.hbrBackground = (HBRUSH)(COLOR_BTNSHADOW + 1);

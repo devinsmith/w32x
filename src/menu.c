@@ -37,14 +37,14 @@ struct WndMenu {
 	HWND menuwnd;
 };
 
-static int MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam,
-    LPARAM lParam);
+static LRESULT CALLBACK MenuWindowProc(HWND wnd, unsigned int msg,
+    WPARAM wParam, LPARAM lParam);
 
 WNDCLASS MenuClass = {
 	"#32768", (HBRUSH)(COLOR_MENUBAR + 1), MenuWindowProc, 0
 };
 
-static int
+static LRESULT CALLBACK
 MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg) {

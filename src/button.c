@@ -35,8 +35,8 @@ struct RadioButtonInfo {
 	int activated;
 };
 
-static int RadioButtonProc(HWND wnd, unsigned int msg, WPARAM wParam,
-    LPARAM lParam);
+static LRESULT CALLBACK RadioButtonProc(HWND wnd, unsigned int msg,
+    WPARAM wParam, LPARAM lParam);
 
 WNDCLASS ButtonClass = {
 	"RadioButton",
@@ -84,7 +84,7 @@ drawRadioButton(HWND wnd, int x, int y, unsigned int w,
 	TextOut(hdc, RB_X * 2 + RBDIAM, h, label, strlen(label));
 }
 
-static int
+static LRESULT CALLBACK
 RadioButtonProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
 	RECT winRect;

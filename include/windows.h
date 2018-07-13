@@ -77,6 +77,8 @@ extern "C" {
 #define FALSE   0
 #define TRUE    1
 
+#define CALLBACK
+
 /*
  * Basic typedefs are mostly from:
  * https://msdn.microsoft.com/en-us/library/windows/desktop/aa383751(v=vs.85).aspx
@@ -103,6 +105,7 @@ typedef unsigned long ULONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef uintptr_t UINT_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef ULONG_PTR DWORD_PTR;
 typedef ULONG_PTR *PDWORD_PTR; // 32 bit on 32 bit, 64 bit on 64.
+typedef LONG_PTR LRESULT;
 
 typedef char *LPTSTR;
 typedef void *LPVOID;
@@ -133,7 +136,7 @@ typedef struct WndClass WndClass;
 typedef struct WndDC *HDC;
 typedef struct Wnd *HWND;
 typedef struct WndMenu *HMENU;
-typedef int (*WNDPROC)(HWND, UINT, WPARAM, LPARAM);
+typedef LRESULT (*WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 
 /* GDI objects */
 typedef struct GDIOBJ *HGDIOBJ;
@@ -210,7 +213,7 @@ BOOL FillRect(HDC hdc, const RECT *lprc, HBRUSH hbr);
 
 void *GetWindowLongPtr(HWND wnd, int nIndex);
 int SendMessage(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
-int DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+LRESULT DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
 
 BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax);
 int DispatchMessage(const MSG *msg);

@@ -58,7 +58,7 @@ handle_ncpaint(HWND hwnd)
 	return 0;
 }
 
-int
+LRESULT
 DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;

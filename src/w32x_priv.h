@@ -45,7 +45,7 @@ struct Wnd {
 	int isTopLevel;
 	HDC hdc;
 	HMENU menu;
-	int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+	WNDPROC proc;
 
 	char wndExtra[];
 };
@@ -56,7 +56,7 @@ struct WndClass {
 	char *name;
 	unsigned long border_pixel;
 	unsigned long background_pixel;
-	int (*proc)(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam);
+	WNDPROC proc;
 	size_t wndExtra;
 };
 
