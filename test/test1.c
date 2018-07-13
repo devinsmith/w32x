@@ -30,9 +30,19 @@
 #include <windows.h>
 
 static LRESULT CALLBACK
-MainWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
+MainWindowProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(wnd, msg, wParam, lParam);
+	switch (msg) {
+	case WM_CLOSE:
+		DestroyWindow(wnd);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(wnd, msg, wParam, lParam);
+	}
+	return 0;
 }
 
 int
