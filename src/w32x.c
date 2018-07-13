@@ -1,7 +1,8 @@
 /*
  * Copyright (c) 2000 Masaru OKI
  * Copyright (c) 2001 TAMURA Kent
- * Copyright (c) 2017 Devin Smith <devin@devinsmith.net>
+ * Copyright (c) 2017-2018 Devin Smith <devin@devinsmith.net>
+ * Copyright (c) 2018 Robert Butler <me@r-butler.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -128,7 +129,8 @@ main(int argc, char *argv[])
 	RegisterClass(&ButtonClass);
 	RegisterClass(&MenuClass);
 
-	result = WinMain((HINSTANCE) module->dlpi_addr, (HINSTANCE) 0, lpCmdLine, 0);
+	result = WinMain((HINSTANCE) module->dlpi_addr, (HINSTANCE) 0, lpCmdLine,
+	    SW_SHOWNORMAL);
 
 	free(lpCmdLine);
 
@@ -197,9 +199,19 @@ RegisterClass(WNDCLASS *wndClass)
 }
 
 void
-ShowWindow(HWND wnd)
+ShowWindow(HWND wnd, int nCmdShow)
 {
-	XMapWindow(disp, wnd->window);
+	switch (nCmdShow) {
+	case SW_HIDE:
+		XUnmapWindow(disp, wnd->window);
+		break;
+	case SW_SHOW:
+	case SW_SHOWNORMAL:
+		XMapWindow(disp, wnd->window);
+		break;
+	default:
+		break;
+	}
 }
 
 void

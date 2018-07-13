@@ -179,12 +179,13 @@ typedef MSG *LPMSG;
 #include <winuser.h>
 #include <wingdi.h>
 
-int w32x_init(const char *display_name);
-
-
 int RegisterClass(WNDCLASS *wndclass);
 
-void ShowWindow(HWND wnd);
+#define SW_HIDE 0
+#define SW_SHOWNORMAL 1
+#define SW_SHOW 5
+
+void ShowWindow(HWND wnd, int nCmdShow);
 void SetWindowName(HWND wnd, const char *name);
 int GetWindowText(HWND wnd, char *lpString, int nMaxCount);
 void DestroyWindow(HWND wnd);

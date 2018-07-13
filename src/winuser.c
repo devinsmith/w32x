@@ -130,8 +130,8 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
 	    StructureNotifyMask);
 
 	/* Parent will explicitly call ShowWindow when ready */
-	if (parent != NULL)
-		ShowWindow(wnd);
+	if (parent != NULL && (dwStyle & WS_VISIBLE))
+		ShowWindow(wnd, SW_SHOWNORMAL);
 
 	/* For top level windows we want to do some extra special case
 	 * processing */
