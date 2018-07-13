@@ -100,6 +100,37 @@ HGDIOBJ GetStockObject(int fnObject)
 	return NULL;
 }
 
+int GetObject(HANDLE h, int c, LPVOID pv)
+{
+	struct GDIOBJ *obj = h;
+
+	/* Determine the type of object this is */
+	switch (obj->obj_sig) {
+	case PEN_MAGIC:
+		printf("XXX: GetObject (Pen) Not done\n");
+		break;
+	case BRUSH_MAGIC: {
+		if (c != sizeof(LOGBRUSH))
+			return 0;
+
+		LOGBRUSH *lb = pv;
+		lb->lbStyle = 0; /* Not implemented */
+		lb->lbColor = obj->crColor;
+		lb->lbHatch = 0;
+		return sizeof(LOGBRUSH);
+		}
+		break;
+	case FONT_MAGIC:
+		printf("XXX: GetObject (Font) Not done\n");
+		break;
+	default:
+		printf("Unknown GDI object type\n");
+		break;
+	}
+
+	return 0;
+}
+
 HBRUSH CreateBrushIndirect(const LOGBRUSH *lplb)
 {
 	struct GDIOBJ *obj;

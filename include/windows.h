@@ -77,6 +77,7 @@ typedef unsigned long ULONG_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 typedef uintptr_t UINT_PTR; // 32 bit on 32 bit, 64 bit on 64 bit.
 
 typedef char *LPTSTR;
+typedef void *LPVOID;
 
 typedef UINT_PTR WPARAM;
 typedef LONG_PTR LPARAM;
@@ -98,6 +99,7 @@ typedef DWORD COLORREF;
 
 /* Type declarations */
 typedef void *HINSTANCE;
+typedef void *HANDLE;
 
 typedef struct WndClass WndClass;
 typedef struct WndDC *HDC;
@@ -166,6 +168,7 @@ HPEN CreatePen(int fnPenStyle, int nWidth, COLORREF crColor);
 
 BOOL DeleteObject(HGDIOBJ hObject);
 HGDIOBJ SelectObject(HDC hdc, HGDIOBJ hgdiobj);
+int GetObject(HANDLE h, int c, LPVOID pv);
 COLORREF SetDCBrushColor(HDC hdc, COLORREF crColor);
 BOOL TextOut(HDC hdc, int nXStart, int nYStart, const char *lpString,
     size_t cchString);
