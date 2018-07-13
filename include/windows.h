@@ -143,12 +143,11 @@ typedef struct GDIOBJ *HPEN;
 typedef struct GDIOBJ *HRGN;
 
 typedef struct tagWNDCLASS {
-  const char *Name;
+  const char *lpszClassName;
   HBRUSH hbrBackground;
   WNDPROC lpfnWndProc;
-  size_t wndExtra;
+  size_t cbWndExtra;
 } WNDCLASS;
-
 
 typedef struct tagLOGBRUSH {
   UINT      lbStyle;

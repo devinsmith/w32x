@@ -161,7 +161,7 @@ RegisterClass(WNDCLASS *wndClass)
 	if (wndClass == NULL)
 		return -1;
 
-	wc = get_class_by_name(wndClass->Name);
+	wc = get_class_by_name(wndClass->lpszClassName);
 	if (wc != NULL) {
 		/* Already registered */
 		return 1;
@@ -185,10 +185,10 @@ RegisterClass(WNDCLASS *wndClass)
 
 	/* Register a new class */
 	wc = calloc(1, sizeof(WndClass));
-	wc->name = strdup(wndClass->Name);
+	wc->name = strdup(wndClass->lpszClassName);
 	wc->border_pixel = blackpixel;
 	wc->background_pixel = back_col.pixel;
-	wc->wndExtra = wndClass->wndExtra;
+	wc->wndExtra = wndClass->cbWndExtra;
 	wc->proc = wndClass->lpfnWndProc;
 	wc->next = class_list;
 	class_list = wc;
