@@ -305,3 +305,8 @@ BOOL UpdateWindow(HWND hwnd)
 
 	return TRUE;
 }
+
+HCURSOR LoadCursor(HINSTANCE hInst, LPSTR lpCursorName)
+{
+  return NULL;
+}

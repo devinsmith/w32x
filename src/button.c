@@ -42,6 +42,7 @@ WNDCLASS ButtonClass = {
 	"RadioButton",
   (HBRUSH)(COLOR_BTNFACE + 1),
   RadioButtonProc,
+  NULL,
   sizeof(struct RadioButtonInfo)
 };
 

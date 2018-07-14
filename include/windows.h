@@ -95,6 +95,7 @@ extern "C" {
  */
 
 typedef unsigned char BYTE;
+typedef unsigned short WORD;
 typedef int BOOL;
 typedef int LONG;
 typedef unsigned int DWORD;
@@ -108,6 +109,7 @@ typedef ULONG_PTR *PDWORD_PTR; // 32 bit on 32 bit, 64 bit on 64.
 typedef LONG_PTR LRESULT;
 
 typedef char *LPTSTR;
+typedef char *LPSTR;
 typedef void *LPVOID;
 
 typedef UINT_PTR WPARAM;
@@ -145,10 +147,14 @@ typedef struct GDIOBJ *HBRUSH;
 typedef struct GDIOBJ *HPEN;
 typedef struct GDIOBJ *HRGN;
 
+/* XXX: Fix */
+typedef void *HCURSOR;
+
 typedef struct tagWNDCLASS {
   const char *lpszClassName;
   HBRUSH hbrBackground;
   WNDPROC lpfnWndProc;
+  HCURSOR hCursor;
   size_t cbWndExtra;
 } WNDCLASS;
 

@@ -32,6 +32,9 @@
 #ifndef __WINUSER_H__
 #define __WINUSER_H__
 
+#define MAKEINTRESOURCE(i) ((LPSTR)((ULONG_PTR)((WORD)(i))))
+
+
 /* GetWindowLong indexes */
 #define GWL_EXSTYLE -20
 #define GWL_STYLE -16
@@ -76,6 +79,8 @@
 /* Create Window (CW) flags */
 #define CW_USEDEFAULT ((int)0x80000000)
 
+#define IDC_ARROW MAKEINTRESOURCE(32512)
+
 typedef struct tagPAINTSTRUCT {
   HDC  hdc;
   BOOL fErase;
@@ -106,5 +111,8 @@ BOOL InvalidateRect(HWND hWnd, const RECT *lpRect, BOOL bErase);
 int ReleaseDC(HWND hWnd, HDC hDC);
 BOOL SetMenu(HWND hwnd, HMENU menu);
 BOOL UpdateWindow(HWND hwnd);
+
+HCURSOR LoadCursor(HINSTANCE hInst, LPSTR lpCursorName);
+
 
 #endif /* __WINUSER_H__ */
