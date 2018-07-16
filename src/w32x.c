@@ -28,6 +28,8 @@
 
 #define _GNU_SOURCE
 #include <sys/queue.h>
+#include <sys/select.h>
+#include <errno.h>
 #include <link.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -286,6 +288,7 @@ static void translate_xevent_to_msg(XEvent *e, LPMSG msg)
 	case ConfigureNotify:
 		// What do we do for this?
 		printf("ConfigureNotify\n");
+		msg->message = WM_SIZE;
 		break;
 	case ButtonPress:
 		if (e->xbutton.button == 1) {
@@ -344,15 +347,55 @@ static void translate_xevent_to_msg(XEvent *e, LPMSG msg)
 	}
 }
 
+static void w32x_process_xevent(LPMSG msg)
+{
+	XEvent event;
+
+	XNextEvent(disp, &event);
+	/* Process events */
+	translate_xevent_to_msg(&event, msg);
+}
+
 BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
 {
 	struct msgq_entry *q_msg;
 	struct paint_entry *q_paint;
-	XEvent event;
+	int x_fd, fds, nf;
+	fd_set readset;
+	struct timeval tmout, *tptr;
 
 	msg->message = 0;
 
-	if (!XPending(disp)) {
+	/* Something waiting, handle right away */
+	if (XPending(disp)) {
+		w32x_process_xevent(msg);
+		return TRUE;
+	}
+
+	/* Do a quick poll */
+	x_fd = ConnectionNumber(disp);
+	fds = x_fd + 1;
+
+	FD_ZERO(&readset);
+	FD_SET(x_fd, &readset);
+
+	tmout.tv_sec = tmout.tv_usec = 0;
+	nf = select(fds, &readset, NULL, NULL, &tmout);
+	if (nf <= 0) {
+		FD_ZERO(&readset);
+	}
+
+	while (1) {
+
+		if ((nf > 0) || ((nf == -1) && (errno == EINTR))) {
+			if (FD_ISSET(x_fd, &readset)) {
+				w32x_process_xevent(msg);
+				return TRUE;
+			} else {
+//				return TRUE;
+			}
+		}
+
 		/* Anything in the queue? */
 		q_msg = TAILQ_FIRST(&g_msg_queue);
 		if (q_msg != NULL) {
@@ -373,15 +416,31 @@ BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
 		/* Anything in the paint queue? */
 		TAILQ_FOREACH(q_paint, &g_paint_queue, entries) {
 			printf("TODO: Handle Event.\n");
+		
 		}
-	}
 
-	/* We loop here until we get a message we can handle */
-	while (msg->message == 0) {
-		/* Process any pending events directly */
-		XNextEvent(disp, &event);
-		/* Process events */
-		translate_xevent_to_msg(&event, msg);
+		tptr = NULL;
+		fds = x_fd + 1;
+		tmout.tv_sec = tmout.tv_usec = 0;
+		FD_ZERO(&readset);
+		FD_SET(x_fd, &readset);
+
+		nf = select(fds, &readset, NULL, NULL, &tmout);
+		if (nf <= 0) {
+			FD_ZERO(&readset);
+		} else {
+			continue;
+		}
+
+		/* sleep until next event */
+		fds = x_fd + 1;
+		FD_ZERO(&readset);
+		FD_SET(x_fd, &readset);
+
+		nf = select(fds, &readset, NULL, NULL, tptr);
+		if (nf == -1) {
+			FD_ZERO(&readset);
+		}
 	}
 
 	return TRUE;
