@@ -369,7 +369,9 @@ BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
 	/* Something waiting, handle right away */
 	if (XPending(disp)) {
 		w32x_process_xevent(msg);
-		return TRUE;
+		if (msg->message != 0) {
+			return TRUE;
+		}
 	}
 
 	/* Do a quick poll */
@@ -390,7 +392,9 @@ BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
 		if ((nf > 0) || ((nf == -1) && (errno == EINTR))) {
 			if (FD_ISSET(x_fd, &readset)) {
 				w32x_process_xevent(msg);
-				return TRUE;
+				if (msg->message != 0) {
+					return TRUE;
+				}
 			} else {
 //				return TRUE;
 			}
