@@ -395,6 +395,7 @@ BOOL GetMessage(LPMSG msg, HWND wnd, UINT wMsgFilterMin, UINT wMsgFilterMax)
 				if (msg->message != 0) {
 					return TRUE;
 				}
+				continue;
 			} else {
 //				return TRUE;
 			}
