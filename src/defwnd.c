@@ -67,6 +67,9 @@ DefWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 	case WM_NCPAINT:
 		handle_ncpaint(wnd);
 		break;
+	case WM_SIZE:
+		/* Nothing special here */
+		break;
 	case WM_PAINT:
 		BeginPaint(wnd, &ps);
 		break;

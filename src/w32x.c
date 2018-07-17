@@ -287,8 +287,8 @@ static void translate_xevent_to_msg(XEvent *e, LPMSG msg)
 		break;
 	case ConfigureNotify:
 		// What do we do for this?
-		printf("ConfigureNotify\n");
 		msg->message = WM_SIZE;
+		msg->wParam = 0;
 		break;
 	case ButtonPress:
 		if (e->xbutton.button == 1) {
@@ -352,6 +352,23 @@ static void w32x_process_xevent(LPMSG msg)
 	XEvent event;
 
 	XNextEvent(disp, &event);
+
+	/* Compress configure events */
+	if (event.xany.type == ConfigureNotify) {
+		XEvent e;
+
+		while (XCheckTypedWindowEvent(disp, event.xconfigure.window,
+		    ConfigureNotify, &e)) {
+			event.xconfigure.width = e.xconfigure.width;
+			event.xconfigure.height = e.xconfigure.height;
+			if (e.xconfigure.send_event) {
+				/* MOVE */
+				event.xconfigure.x = e.xconfigure.x;
+				event.xconfigure.y = e.xconfigure.y;
+			}
+		}
+	}
+
 	/* Process events */
 	translate_xevent_to_msg(&event, msg);
 }

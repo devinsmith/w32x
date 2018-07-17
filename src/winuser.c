@@ -144,6 +144,12 @@ HWND CreateWindowEx(DWORD dwExStyle, const char *lpClassName,
 		XSetWMProtocols(disp, wnd->window, &WM_DELETE_WINDOW, 1);
 	}
 
+	if (menu != NULL) {
+		/* XXX: Needs to be moved to menu.c */
+		CreateWindow("#32768", "Nothing", WS_CHILD | WS_VISIBLE, 0, 0, width,
+		    GetSystemMetrics(SM_CYMENU), wnd, NULL, hInst, NULL);
+	}
+
 	return wnd;
 }
 

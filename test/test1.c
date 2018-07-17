@@ -52,10 +52,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
 	top = CreateWindowEx(0, "TopWindow", "Test1",
 	    WS_OVERLAPPEDWINDOW, 200, 200, 500, 300, NULL, menu, hInstance, NULL);
 
-	/* XXX: Needs to be moved to menu.c */
-	CreateWindow("#32768", "Nothing", WS_CHILD | WS_VISIBLE, 0, 0, 500,
-	    GetSystemMetrics(SM_CYMENU), top, NULL, hInstance, NULL);
-
 	CreateWindow("RadioButton", "Radio 1",
 	    WS_CHILD | WS_BORDER | WS_VISIBLE, 5, 30, 100, 25, top, NULL,
 	    hInstance, NULL);

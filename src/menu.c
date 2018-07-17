@@ -51,6 +51,9 @@ MenuWindowProc(HWND wnd, unsigned int msg, WPARAM wParam, LPARAM lParam)
 	case WM_PAINT:
 		printf("Need to paint menubar\n");
 		break;
+	case WM_SIZE:
+		printf("need to size\n");
+		break;
 	default:
 		break;
 	}
