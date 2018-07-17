@@ -76,3 +76,16 @@ CreateMenu(void)
 
 	return menu;
 }
+
+HMENU
+CreatePopupMenu(void)
+{
+	return CreateMenu();
+}
+
+BOOL
+AppendMenu(HMENU menu, UINT flags, UINT id, LPCSTR title)
+{
+	return TRUE;
+}
+

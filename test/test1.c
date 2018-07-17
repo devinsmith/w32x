@@ -32,7 +32,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
 	WNDCLASS myClass;
 	MSG msg;
 	BOOL bRet;
-	HMENU menu;
+	HMENU menu, fileMenu;
 
 	memset(&myClass, 0, sizeof(WNDCLASS));
 
@@ -44,6 +44,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
 	RegisterClass(&myClass);
 
 	menu = CreateMenu();
+	fileMenu = CreatePopupMenu();
+	AppendMenu(fileMenu, MF_STRING, 0, "E&xit");
+	AppendMenu(menu, MF_STRING | MF_POPUP, (UINT)fileMenu, "&File");
 
 	/* parent window */
 	top = CreateWindowEx(0, "TopWindow", "Test1",

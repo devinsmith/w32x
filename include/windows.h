@@ -110,6 +110,7 @@ typedef LONG_PTR LRESULT;
 
 typedef char *LPTSTR;
 typedef char *LPSTR;
+typedef char *LPCSTR;
 typedef void *LPVOID;
 
 typedef UINT_PTR WPARAM;
@@ -239,7 +240,9 @@ BOOL UnionRect(RECT *dst, const RECT *r1, const RECT *r2);
 BOOL SubtractRect(RECT *dst, const RECT *r1, const RECT *r2);
 
 /* Menus */
+BOOL AppendMenu(HMENU menu, UINT flags, UINT id, LPCSTR title);
 HMENU CreateMenu(void);
+HMENU CreatePopupMenu(void);
 BOOL IsMenu(HMENU menu);
 
 #ifdef __cplusplus
