@@ -3,6 +3,8 @@ A Win32 inspired API/wrapper over Xlib/X11 for Linux and Unix machines.
 
 [![Build Status](https://travis-ci.com/devinsmith/w32x.svg?branch=master)](https://travis-ci.com/devinsmith/w32x)
 
+![Screenshot](docs/w32x.png)
+
 # Requirements
 Debian based systems require the following libraries:
 ```
@@ -22,5 +24,4 @@ that utilizes the library.
 
 Alternatively, CMake files are provided but they may not necessarily be
 up to date.
-
 
