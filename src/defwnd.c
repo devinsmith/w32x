@@ -35,6 +35,11 @@ handle_ncpaint(HWND hwnd)
 {
 	RECT wr;
 	LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+	LONG style = GetWindowLong(hwnd, GWL_STYLE);
+
+	if (((style & WS_CHILD) == 0) && GetMenu(hwnd)) {
+		/* Draw menu bar */
+	}
 
 	/* Not technically correct, because the X11 WM paints our NC area. */
 	GetClientRect(hwnd, &wr);
