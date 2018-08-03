@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/queue.h>
 #include <windows.h>
 
 #define MENU_MAGIC 0x574d4e55 /* 'WMNU' */
@@ -35,6 +36,11 @@
 struct WndMenu {
 	int magic;
 	HWND menuwnd;
+};
+
+struct w32x_menuitem {
+	MENUITEMINFO info;
+	TAILQ_ENTRY(w32x_menuItem) list;
 };
 
 static LRESULT CALLBACK MenuWindowProc(HWND wnd, unsigned int msg,
@@ -92,3 +98,65 @@ AppendMenu(HMENU menu, UINT flags, UINT id, LPCSTR title)
 	return TRUE;
 }
 
+static BOOL
+menuitem_insert_item(struct w32x_menuitem *mi, UINT id,
+    struct w32x_menuitem *item)
+{
+	struct w32x_menuitem *after;
+
+	return FALSE;
+}
+
+static void
+copy_menuiteminfo(MENUITEMINFO *dinfo, DWORD mask, LPCMENUITEMINFO sinfo)
+{
+	if (mask & MIIM_STATE)
+		dinfo->fState = sinfo->fState;
+	if (mask & MIIM_ID)
+		dinfo->wID = sinfo->wID;
+	if (mask & MIIM_SUBMENU)
+		dinfo->hSubMenu = sinfo->hSubMenu;
+	if (mask & MIIM_CHECKMARKS) {
+		dinfo->hbmpChecked = sinfo->hbmpChecked;
+		dinfo->hbmpUnchecked = sinfo->hbmpUnchecked;
+	}
+	if (mask & MIIM_TYPE) {
+		dinfo->fType = sinfo->fType;
+		dinfo->dwTypeData = sinfo->dwTypeData;
+	}
+	if (mask & MIIM_DATA)
+		dinfo->dwItemData = sinfo->dwItemData;
+	if (mask & MIIM_STRING) {
+		dinfo->dwTypeData = sinfo->dwTypeData;
+		dinfo->cch = sinfo->cch;
+	}
+#if (_WIN32_WINNT >= 0x0500)
+	if (mask & MIIM_BITMAP)
+		dinfo->hbmpItem = sinfo->hbmpItem;
+#endif
+	if (mask & MIIM_FTYPE)
+		dinfo->fType = sinfo->fType;
+	dinfo->fMask = sinfo->fMask;
+	if (dinfo->fMask & MIIM_TYPE)
+		dinfo->fMask |= MIIM_FTYPE | MIIM_STRING;
+}
+
+BOOL
+InsertMenuItem(HMENU menu, UINT pos, BOOL bypos, LPCMENUITEMINFO info)
+{
+	struct w32x_menuitem *item, *after;
+
+	if (!IsMenu(menu)) {
+		return FALSE;
+	}
+
+	item = malloc(sizeof(struct w32x_menuitem));
+	memset(item, 0, sizeof(struct w32x_menuitem));
+	item->info.cbSize = sizeof(item->info);
+	copy_menuiteminfo(&item->info, info->fMask, info);
+	if (info->fType == MFT_STRING) {
+		item->info.dwTypeData = strdup(info->dwTypeData);
+	}
+
+	return TRUE;
+}

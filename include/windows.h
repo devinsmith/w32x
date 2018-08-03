@@ -150,6 +150,7 @@ typedef struct GDIOBJ *HRGN;
 
 /* XXX: Fix */
 typedef void *HCURSOR;
+typedef void *HBITMAP;
 
 typedef struct tagWNDCLASS {
   const char *lpszClassName;
@@ -185,6 +186,21 @@ typedef struct tagMSG {
   LPARAM lParam;
 } MSG;
 typedef MSG *LPMSG;
+
+typedef struct tagMENUITEMINFO {
+	UINT cbSize;
+	UINT fMask;
+	UINT fType;
+	UINT fState;
+	UINT wID;
+	HMENU hSubMenu;
+	HBITMAP hbmpChecked;
+	HBITMAP hbmpUnchecked;
+	DWORD dwItemData;
+	LPTSTR dwTypeData;
+	UINT cch;
+} MENUITEMINFO,*LPMENUITEMINFO;
+typedef MENUITEMINFO const *LPCMENUITEMINFO;
 
 #include <winuser.h>
 #include <wingdi.h>
@@ -239,8 +255,28 @@ BOOL CopyRect(RECT *dst, const RECT *src);
 BOOL UnionRect(RECT *dst, const RECT *r1, const RECT *r2);
 BOOL SubtractRect(RECT *dst, const RECT *r1, const RECT *r2);
 
+#define MIIM_CHECKMARKS	8
+#define MIIM_DATA	32
+#define MIIM_ID	2
+#define MIIM_STATE	1
+#define MIIM_SUBMENU	4
+#define MIIM_TYPE	16
+#define MIIM_STRING	0x040
+#define MIIM_BITMAP	0x080
+#define MIIM_FTYPE	0x0100
+#define MFT_BITMAP	4
+#define MFT_MENUBARBREAK	32
+#define MFT_MENUBREAK	64
+#define MFT_OWNERDRAW	256
+#define MFT_RADIOCHECK	512
+#define MFT_RIGHTJUSTIFY	0x4000
+#define MFT_SEPARATOR	0x800
+#define MFT_STRING	0
+
 /* Menus */
 BOOL AppendMenu(HMENU menu, UINT flags, UINT id, LPCSTR title);
+BOOL InsertMenu(HMENU menu, UINT pos, UINT flags, UINT id, LPCSTR ptr);
+BOOL InsertMenuItem(HMENU menu, UINT pos, BOOL bypos, LPCMENUITEMINFO info);
 HMENU CreateMenu(void);
 HMENU CreatePopupMenu(void);
 BOOL IsMenu(HMENU menu);
