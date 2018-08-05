@@ -274,8 +274,8 @@ BOOL SubtractRect(RECT *dst, const RECT *r1, const RECT *r2);
 #define MFT_STRING	0
 
 /* Menus */
-BOOL AppendMenu(HMENU menu, UINT flags, UINT id, LPCSTR title);
-BOOL InsertMenu(HMENU menu, UINT pos, UINT flags, UINT id, LPCSTR ptr);
+BOOL AppendMenu(HMENU menu, UINT flags, UINT_PTR id, LPCSTR title);
+BOOL InsertMenu(HMENU menu, UINT pos, UINT flags, UINT_PTR id, LPCSTR ptr);
 BOOL InsertMenuItem(HMENU menu, UINT pos, BOOL bypos, LPCMENUITEMINFO info);
 HMENU CreateMenu(void);
 HMENU CreatePopupMenu(void);

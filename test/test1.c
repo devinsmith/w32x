@@ -46,7 +46,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR pCmdLine,
 	menu = CreateMenu();
 	fileMenu = CreatePopupMenu();
 	AppendMenu(fileMenu, MF_STRING, 0, "E&xit");
-	AppendMenu(menu, MF_STRING | MF_POPUP, (UINT)fileMenu, "&File");
+	AppendMenu(menu, MF_STRING | MF_POPUP, (UINT_PTR)fileMenu, "&File");
 
 	/* parent window */
 	top = CreateWindowEx(0, "TopWindow", "Test1",

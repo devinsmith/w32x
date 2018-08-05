@@ -93,7 +93,7 @@ CreatePopupMenu(void)
 }
 
 BOOL
-AppendMenu(HMENU menu, UINT flags, UINT id, LPCSTR title)
+AppendMenu(HMENU menu, UINT flags, UINT_PTR id, LPCSTR title)
 {
 	return TRUE;
 }
@@ -139,6 +139,12 @@ copy_menuiteminfo(MENUITEMINFO *dinfo, DWORD mask, LPCMENUITEMINFO sinfo)
 	dinfo->fMask = sinfo->fMask;
 	if (dinfo->fMask & MIIM_TYPE)
 		dinfo->fMask |= MIIM_FTYPE | MIIM_STRING;
+}
+
+BOOL
+InsertMenu(HMENU menu, UINT pos, UINT flags, UINT_PTR id, LPCSTR ptr)
+{
+	return FALSE;
 }
 
 BOOL
