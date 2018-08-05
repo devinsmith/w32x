@@ -33,14 +33,17 @@
 
 #define MENU_MAGIC 0x574d4e55 /* 'WMNU' */
 
-struct WndMenu {
-	int magic;
-	HWND menuwnd;
-};
-
 struct w32x_menuitem {
 	MENUITEMINFO info;
-	TAILQ_ENTRY(w32x_menuItem) list;
+	TAILQ_ENTRY(w32x_menuitem) list;
+};
+
+struct WndMenu {
+	int magic;
+	unsigned int nitem;
+	HWND menuwnd;
+	HMENU parent;
+	TAILQ_HEAD(menulist, w32x_menuitem) item;
 };
 
 static LRESULT CALLBACK MenuWindowProc(HWND wnd, unsigned int msg,
@@ -82,6 +85,9 @@ CreateMenu(void)
 
 	menu = calloc(1, sizeof(struct WndMenu));
 	menu->magic = MENU_MAGIC;
+	menu->nitem = 0;
+	menu->parent = NULL;
+	TAILQ_INIT(&menu->item);
 
 	return menu;
 }
@@ -99,10 +105,23 @@ AppendMenu(HMENU menu, UINT flags, UINT_PTR id, LPCSTR title)
 }
 
 static BOOL
-menuitem_insert_item(struct w32x_menuitem *mi, UINT id,
-    struct w32x_menuitem *item)
+menu_insert_item(HMENU menu, UINT id, struct w32x_menuitem *item)
 {
 	struct w32x_menuitem *after;
+	HMENU submenu;
+
+	TAILQ_FOREACH(after, &menu->item, list) {
+		if (after->info.wID == id) {
+			TAILQ_INSERT_BEFORE(after, item, list);
+			menu->nitem++;
+			return TRUE;
+		}
+		if (after->info.hSubMenu != NULL) {
+			submenu = after->info.hSubMenu;
+			if (menu_insert_item(submenu, id, item))
+				return TRUE;
+		}
+	}
 
 	return FALSE;
 }
@@ -164,5 +183,35 @@ InsertMenuItem(HMENU menu, UINT pos, BOOL bypos, LPCMENUITEMINFO info)
 		item->info.dwTypeData = strdup(info->dwTypeData);
 	}
 
+	if (bypos != FALSE) {
+		unsigned int i;
+		/*
+		 * pos == position (nth item)
+		 */
+		after = TAILQ_FIRST(&menu->item);
+		for (i = 0; after != NULL && i < pos; i++) {
+			after = TAILQ_NEXT(after, list);
+		}
+		if (after != NULL) {
+			TAILQ_INSERT_BEFORE(after, item, list);
+		} else {
+			TAILQ_INSERT_TAIL(&menu->item, item, list);
+		}
+		menu->nitem++;
+	} else {
+		/*
+		 * pos == item ID
+		 */
+		if (!menu_insert_item(menu, pos, item)) {
+			printf("%s: No specified ID %u in HMENU %p\n", __func__,
+			    pos, menu);
+			free(item);
+			return FALSE;
+		}
+	}
+	if (item->info.hSubMenu != NULL) {
+		HMENU psm = item->info.hSubMenu;
+		psm->parent = menu;
+	}
 	return TRUE;
 }
