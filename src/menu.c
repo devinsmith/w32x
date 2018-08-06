@@ -101,7 +101,7 @@ CreatePopupMenu(void)
 BOOL
 AppendMenu(HMENU menu, UINT flags, UINT_PTR id, LPCSTR title)
 {
-	return TRUE;
+	return InsertMenu(menu, 0xffffffff, flags | MF_BYPOSITION, id, title);
 }
 
 static BOOL
@@ -163,7 +163,44 @@ copy_menuiteminfo(MENUITEMINFO *dinfo, DWORD mask, LPCMENUITEMINFO sinfo)
 BOOL
 InsertMenu(HMENU menu, UINT pos, UINT flags, UINT_PTR id, LPCSTR ptr)
 {
-	return FALSE;
+	MENUITEMINFO info;
+
+	if (!IsMenu(menu)) {
+		return FALSE;
+	}
+	memset(&info, 0, sizeof(info));
+	info.cbSize = sizeof(info);
+	info.fMask = MIIM_STATE | MIIM_ID | MIIM_TYPE;
+	info.fState = MFS_ENABLED;
+	if (flags & MF_POPUP) {
+		info.hSubMenu = (HMENU)id;
+		info.fMask |= MIIM_SUBMENU;
+	} else {
+		info.hSubMenu = NULL;
+	}
+	if (flags & MF_CHECKED) {
+		info.fState = MFS_CHECKED;
+	}
+	info.wID = id;
+	info.dwTypeData = (LPSTR)ptr;
+	if (flags & MF_BITMAP) {
+		info.fType = MFT_BITMAP;
+	} else if (flags & MF_OWNERDRAW) {
+		info.fType = MFT_OWNERDRAW;
+	} else if (flags & MF_SEPARATOR) {
+		info.fType = MFT_SEPARATOR;
+	} else {
+		/* Default: MF_STRING */
+		info.fType = MFT_STRING;
+		if (ptr != NULL) {
+			info.cch = strlen(ptr);
+		} else {
+			info.cch = 0;
+			info.dwTypeData = "";
+		}
+	}
+	return InsertMenuItem(menu, pos, (flags & MF_BYPOSITION) ? TRUE : FALSE,
+			&info);
 }
 
 BOOL

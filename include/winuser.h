@@ -81,12 +81,6 @@
 
 #define IDC_ARROW MAKEINTRESOURCE(32512)
 
-/* Menu defines */
-#define MF_STRING 0x00000000
-#define MF_BITMAP 0x00000004
-#define MF_POPUP  0x00000010
-
-
 typedef struct tagPAINTSTRUCT {
   HDC  hdc;
   BOOL fErase;
