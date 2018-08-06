@@ -9,14 +9,17 @@ DEPS1 = $(SRCS1:.c=.d)
 OBJS = $(OBJS1)
 DEPS = $(DEPS1)
 
+include ../config.mak
+
 CC? = gcc
 RM = rm -f
 
 CFLAGS = -Wall -O2
-INCLUDES = -I../include
+INCLUDES = $(XINCLUDE) $(XFTINCLUDE) -I../include
 
 LIB = libw32x
 STATIC_LIB = $(LIB).a
+LIBS = -L../src -lw32x $(XFTLIB) $(XRANDRLIB) $(XLIB)
 
 EXE1 = test1
 
@@ -25,7 +28,7 @@ EXES = $(EXE1)
 all: $(EXES)
 
 $(EXE1): $(OBJS1) ../src/$(STATIC_LIB)
-	$(CC) $(CFLAGS) -o $(EXE1) $(OBJS1) ../src/$(STATIC_LIB) -lX11
+	$(CC) $(CFLAGS) -o $(EXE1) $(OBJS1) $(LIBS)
 
 .c.o:
 	$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -MT $@ -o $@ -c $<

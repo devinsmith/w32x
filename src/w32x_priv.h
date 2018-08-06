@@ -66,6 +66,9 @@ struct WndDC {
 	int fgPixel;
 	int bgPixel;
 	GC gc;
+#ifdef HAVE_XFT_H
+	XftDraw *xftDraw;
+#endif
 	struct GDIOBJ *selectedPen;
 	struct GDIOBJ *selectedBrush;
 	struct GDIOBJ *selectedFont;

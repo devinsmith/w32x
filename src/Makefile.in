@@ -6,12 +6,14 @@ SRCS = button.c defwnd.c graphics.c menu.c rect.c w32x.c winuser.c
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
 
+include ../config.mak
+
 CC? = gcc
 AR? = ar
 RM = rm -f
 
 CFLAGS = -Wall -O2
-INCLUDES = -I../include
+INCLUDES = $(XINCLUDE) $(XFTINCLUDE) -I../include
 
 LIB = libw32x
 STATIC_LIB = $(LIB).a

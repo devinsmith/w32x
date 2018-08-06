@@ -25,6 +25,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +34,9 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xresource.h>
+#ifdef HAVE_XFT_H
+#include <X11/Xft/Xft.h>
+#endif
 
 #include <windows.h>
 #include "w32x_priv.h"
@@ -42,7 +47,8 @@
 #define FONT_MAGIC    0x4F49 /* IO */
 #define REGION_MAGIC  0x4F4C /* LO */
 
-#define XUI_DEFAULT_FONT "7x14"
+#define W32X_XFLD_DEFAULT_FONT "7x14"
+#define W32X_XFT_DEFAULT_FONT "Sans,90"
 
 extern Display *disp;
 extern int blackpixel;
@@ -68,7 +74,7 @@ static void init_stock_objects(void)
 {
 	system_font = calloc(1, sizeof(struct GDIOBJ));
 	system_font->obj_sig = FONT_MAGIC ;
-	system_font->font = XLoadQueryFont(disp, XUI_DEFAULT_FONT);
+	system_font->font = XLoadQueryFont(disp, W32X_XFLD_DEFAULT_FONT);
 
 	/* The default DC_BRUSH color is WHITE */
 	dc_brush = calloc(1, sizeof(struct GDIOBJ));
