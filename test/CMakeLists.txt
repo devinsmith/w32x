@@ -1,5 +1,2 @@
-FIND_PACKAGE (X11)
-
-ADD_EXECUTABLE(test1 test1.c)
-TARGET_LINK_LIBRARIES(test1 w32x ${X11_LIBRARIES})
-
+add_executable(test1 test1.c)
+target_link_libraries(test1 w32x ${X11_LIBRARIES})

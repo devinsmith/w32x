@@ -1,14 +1,20 @@
-PROJECT (w32x C)
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.7.2)
+project(w32x C)
 
 # We need X11 at least.
-FIND_PACKAGE (X11)
-INCLUDE_DIRECTORIES (${X11_INCLUDE_DIR})
+find_package(X11 REQUIRED)
+find_package(Freetype)
+
+include_directories(${X11_INCLUDE_DIR})
+
+if(FREETYPE_FOUND)
+  include_directories(${FREETYPE_INCLUDE_DIRS})
+endif()
 
 # Add "include" directory.
-INCLUDE_DIRECTORIES (include)
+include_directories(include)
 
-LIST(APPEND libw32x_src
+list(APPEND libw32x_src
   src/button.c
   src/defwnd.c
   src/graphics.c
@@ -17,7 +23,7 @@ LIST(APPEND libw32x_src
   src/w32x.c
   src/winuser.c)
 
-ADD_LIBRARY(w32x STATIC ${libw32x_src})
+add_library(w32x STATIC ${libw32x_src})
 
-ADD_SUBDIRECTORY(test)
+add_subdirectory(test)
 
