@@ -217,6 +217,7 @@ int GetWindowText(HWND wnd, char *lpString, int nMaxCount);
 void DestroyWindow(HWND wnd);
 HWND GetParent(HWND wnd);
 BOOL IsWindow(HWND wnd);
+void SetLastError(DWORD err);
 
 HGDIOBJ GetStockObject(int fnObject);
 DWORD GetSysColor(int nIndex);

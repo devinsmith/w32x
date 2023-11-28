@@ -47,6 +47,8 @@ int whitepixel;
 Display *disp;
 XContext ctxt;
 
+static DWORD last_error;
+
 struct msgq_entry {
 	MSG msg;
 	TAILQ_ENTRY(msgq_entry) entries;
@@ -222,6 +224,12 @@ DestroyWindow(HWND wnd)
 	SendMessage(wnd, WM_DESTROY, 0, 0);
 
 	XDestroyWindow(disp, wnd->window);
+}
+
+void
+SetLastError(DWORD err)
+{
+  last_error = err;
 }
 
 void
